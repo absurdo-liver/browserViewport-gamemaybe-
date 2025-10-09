@@ -61,4 +61,4 @@ ctx.stroke();
 
 }
 
-renderCanvas();
+renderCanvas(0,0);

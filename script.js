@@ -19,6 +19,7 @@ function inputHandler(e){
 center: (${centerX}, ${centerY})
 distance: ${distanceOrigin}px
 ` + vectorHandler([centerX,centerY],[e.clientX,e.clientY]);
+  renderCanvas(e.clientX - centerX,e.clientY - centerY);
 }
 
 
@@ -28,19 +29,19 @@ function vectorHandler(origin, coordinates){
   return `v = (${x}, ${y})`;
 }
 
-function renderCanvas(){
+function renderCanvas(mousex,mousey){
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 let canvasWidth = canvas.width;
 let canvasHeight = canvas.height;
 let originX = resizeHandler()[0];
 let originY = resizeHandler()[1];
-let scale = 20; // Pixels per unit
+let scale = 20; // px per unit
 
-// Set up coordinate system
-ctx.translate(originX, originY); // Move origin to the center
+// set up coordinate system
+ctx.translate(originX, originY); // move origin to center
 
-// Draw the X and Y axes
+// draw  X and Y axes
 ctx.beginPath();
 ctx.strokeStyle = 'black';
 ctx.lineWidth = 2;
@@ -50,19 +51,14 @@ ctx.moveTo(0, -originY);
 ctx.lineTo(0, canvasHeight - originY); // Y-axis
 ctx.stroke();
 
-// Draw a sample line
+// draw line to mouse
 ctx.beginPath();
 ctx.strokeStyle = 'red';
 ctx.lineWidth = 2;
 ctx.moveTo(0 * scale, 0 * scale);
-ctx.lineTo(5 * scale, 10 * scale);
+ctx.lineTo(mousex, mousey);
 ctx.stroke();
 
-// Draw a sample point
-ctx.beginPath();
-ctx.fillStyle = 'blue';
-ctx.arc(5 * scale, 10 * scale, 3, 0, 2 * Math.PI);
-ctx.fill();
 }
 
 renderCanvas();

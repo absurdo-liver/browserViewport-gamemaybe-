@@ -29,6 +29,8 @@ function vectorHandler(origin, coordinates){
 }
 
 function renderCanvas(){
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 let canvasWidth = canvas.width;
 let canvasHeight = canvas.height;
 let originX = resizeHandler()[0];
@@ -37,7 +39,6 @@ let scale = 20; // Pixels per unit
 
 // Set up coordinate system
 ctx.translate(originX, originY); // Move origin to the center
-// ctx.scale(1, -1); // Flip the Y-axis to match Cartesian coordinates
 
 // Draw the X and Y axes
 ctx.beginPath();

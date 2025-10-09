@@ -68,6 +68,11 @@ function renderCanvas(mousex, mousey) {
   ctx.moveTo(0, -originY);
   ctx.lineTo(0, canvasHeight - originY); // x-axis
   ctx.stroke();
+  
+    // Draw all the points from the clickedPoints array
+  clickedPoints.forEach(point => {
+    drawPoint(ctx, point.x, point.y);
+  });
 
   // draw line to mouse
   if (mousex !== undefined && mousey !== undefined) {
@@ -78,11 +83,6 @@ function renderCanvas(mousex, mousey) {
     ctx.lineTo(mousex, mousey);
     ctx.stroke();
   }
-
-  // Draw all the points from the clickedPoints array
-  clickedPoints.forEach(point => {
-    drawPoint(ctx, point.x, point.y);
-  });
 }
 
 

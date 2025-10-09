@@ -26,7 +26,7 @@ function clickHandler(e) {
     x: e.clientX - centerX,
     y: e.clientY - centerY
   });
-  renderCanvas();
+  renderCanvas(e.clientX - centerX,e.clientY - centerY);
 }
 
 function resizeHandler(){

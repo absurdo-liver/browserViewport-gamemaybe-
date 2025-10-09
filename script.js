@@ -75,14 +75,13 @@ function renderCanvas(mousex, mousey) {
   });
 
   // draw line to mouse
-  if (mousex !== undefined && mousey !== undefined) {
-    ctx.beginPath();
-    ctx.strokeStyle = 'red';
-    ctx.lineWidth = 2;
-    ctx.moveTo(0, 0);
-    ctx.lineTo(mousex, mousey);
-    ctx.stroke();
-  }
+  ctx.beginPath();
+  ctx.strokeStyle = 'red';
+  ctx.lineWidth = 2;
+  ctx.moveTo(0, 0);
+  ctx.lineTo(mousex, mousey);
+  ctx.stroke();
+
 }
 
 

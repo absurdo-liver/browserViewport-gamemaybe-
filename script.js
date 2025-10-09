@@ -2,9 +2,10 @@ const infoText = document.getElementById('infoText');
 const canvas = document.getElementById('cartesianCanvas');
 const ctx = canvas.getContext('2d');
 
-window.addEventListener('mousemove', mouseMoveHandler);
-window.addEventListener('click', clickHandler);
+const clickedPoints = [];
 
+window.addEventListener('mousemove', mouseMoveHandler);
+canvas.addEventListener('click', clickHandler);
 
 
 function mouseMoveHandler(e){
@@ -18,8 +19,14 @@ distance: ${distanceOrigin}px
   renderCanvas(e.clientX - centerX,e.clientY - centerY);
 }
 
-function clickHandler(){
-  //nothing yet
+function clickHandler(e) {
+  let centerX = resizeHandler()[0];
+  let centerY = resizeHandler()[1];
+  clickedPoints.push({
+    x: e.clientX - centerX,
+    y: e.clientY - centerY
+  });
+  renderCanvas();
 }
 
 function resizeHandler(){
@@ -34,36 +41,48 @@ function vectorHandler(origin, coordinates){
   return `v = (${x}, ${y})`;
 }
 
-function renderCanvas(mousex,mousey){
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-let canvasWidth = canvas.width;
-let canvasHeight = canvas.height;
-let originX = resizeHandler()[0];
-let originY = resizeHandler()[1];
-let scale = 20; // px per unit
+function drawPoint(ctx, x, y) {
+  ctx.fillStyle = 'black';
+  ctx.beginPath();
+  ctx.arc(x, y, 2, 0, Math.PI * 2, true);
+  ctx.fill();
+}
 
-// set up coordinate system
-ctx.translate(originX, originY); // move origin to center
+function renderCanvas(mousex, mousey) {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  let canvasWidth = canvas.width;
+  let canvasHeight = canvas.height;
+  let originX = resizeHandler()[0];
+  let originY = resizeHandler()[1];
 
-// draw  X and Y axes
-ctx.beginPath();
-ctx.strokeStyle = 'black';
-ctx.lineWidth = 2;
-ctx.moveTo(-originX, 0);
-ctx.lineTo(canvasWidth - originX, 0); // X-axis
-ctx.moveTo(0, -originY);
-ctx.lineTo(0, canvasHeight - originY); // Y-axis
-ctx.stroke();
+  // set up coordinate system
+  ctx.translate(originX, originY); // move origin to center
 
-// draw line to mouse
-ctx.beginPath();
-ctx.strokeStyle = 'red';
-ctx.lineWidth = 2;
-ctx.moveTo(0 * scale, 0 * scale);
-ctx.lineTo(mousex, mousey);
-ctx.stroke();
+  // Draw x and x axes
+  ctx.beginPath();
+  ctx.strokeStyle = 'black';
+  ctx.lineWidth = 2;
+  ctx.moveTo(-originX, 0);
+  ctx.lineTo(canvasWidth - originX, 0); // x-axis
+  ctx.moveTo(0, -originY);
+  ctx.lineTo(0, canvasHeight - originY); // x-axis
+  ctx.stroke();
 
+  // draw line to mouse
+  if (mousex !== undefined && mousey !== undefined) {
+    ctx.beginPath();
+    ctx.strokeStyle = 'red';
+    ctx.lineWidth = 2;
+    ctx.moveTo(0, 0);
+    ctx.lineTo(mousex, mousey);
+    ctx.stroke();
+  }
+
+  // Draw all the points from the clickedPoints array
+  clickedPoints.forEach(point => {
+    drawPoint(ctx, point.x, point.y);
+  });
 }
 
 

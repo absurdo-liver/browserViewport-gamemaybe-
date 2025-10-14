@@ -80,8 +80,19 @@ function renderCanvas(mousex, mousey) {
   ctx.moveTo(-originX, 0);
   ctx.lineTo(canvasWidth - originX, 0); // x-axis
   ctx.moveTo(0, -originY);
-  ctx.lineTo(0, canvasHeight - originY); // x-axis
+  ctx.lineTo(0, canvasHeight - originY); // y-axis
   ctx.stroke();
+
+  for(let i = -canvasWidth; i < canvasWidth; i += canvasWidth/20){
+    ctx.beginPath();
+    ctx.strokeStyle = 'grey';
+    ctx.lineWidth = 1;
+    ctx.moveTo(-originX, i);
+    ctx.lineTo(canvasWidth - originX, i); // x-axis
+    ctx.moveTo(i, -originY);
+    ctx.lineTo(i, canvasHeight - originY); // y-axis
+    ctx.stroke();
+  }
   
     // Draw all the points from the clickedPoints array
   clickedPoints.forEach(point => {
@@ -137,7 +148,10 @@ function hotkeyHandler(e){
   }
   
   if(e.ctrlKey && e.key === 'ArrowUp'){
-    keyMoveSpeed += 1;
+    if(keyMoveSpeed < 20){
+      keyMoveSpeed += 1;
+    }
+    keyMoveSpeed += 0;
   }
   if(e.ctrlKey && e.key === 'ArrowDown'){
     if(keyMoveSpeed > 1){

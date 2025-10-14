@@ -5,7 +5,9 @@ const ctx = canvas.getContext('2d');
 var clickedPoints = [];
 var lastMousePos = [];
 var distanceOrigin = 0;
-drawingExtras = false;
+var globalMouseX = 0;
+var globalMouseY = 0;
+drawingExtras = true;
 
 window.addEventListener('mousemove', mouseMoveHandler);
 window.addEventListener('keydown', hotkeyHandler);
@@ -21,6 +23,8 @@ center: (${centerX}, ${centerY})
 distance: ${distanceOrigin}px
 ` + vectorHandler([centerX,centerY],[e.clientX,e.clientY]);
   lastMousePos = [e.clientX - centerX,e.clientY - centerY];
+  globalMouseX = e.clientX;
+  globalMouseY =e.clientY;
   renderCanvas(e.clientX - centerX,e.clientY - centerY);
 }
 
@@ -94,7 +98,8 @@ function renderCanvas(mousex, mousey) {
     ctx.arc(0, 0, distanceOrigin, 0, 2 * Math.PI);
     ctx.strokeStyle = "grey";
     ctx.lineWidth = 3;
-    ctx.stroke();  
+    ctx.stroke();
+   
     // vertical line
     ctx.beginPath();
     ctx.strokeStyle = 'red';
@@ -110,7 +115,8 @@ function renderCanvas(mousex, mousey) {
     ctx.lineTo(mousex, 0);
     ctx.stroke();
 
-  } else {return}
+  }
+  circleMaths(globalMouseX,globalMouseY);
 }
 
 function hotkeyHandler(e){
@@ -126,6 +132,19 @@ function hotkeyHandler(e){
     }
     renderCanvas(lastMousePos[0],lastMousePos[1]);
   } else {return}
+}
+
+function circleMaths(x,y){
+  let coord;
+  if(document.getElementById("tempCoordText")){document.getElementById("tempCoordText").remove()}
+  coord = document.createElement('p');
+  coord.id = 'tempCoordText';
+  coord.style.position = 'absolute';
+  coord.style.top = `${y}px`;
+  coord.style.left = `${x}px`;
+  coord.textContent = `(${x}, ${y})`;
+  coord.style.backgroundColor = 'white';
+  document.body.appendChild(coord);
 }
 
 

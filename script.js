@@ -4,11 +4,12 @@ const ctx = canvas.getContext('2d');
 
 var clickedPoints = [];
 var lastMousePos = [];
-var distanceOrigin = 0;
-var globalMouseX = 0;
-var globalMouseY = 0;
+var distanceOrigin = 50;
+var globalMouseX = 100;
+var globalMouseY = 100;
 var globalcenterX;
 var globalcenterY;
+var keyMoveSpeed = 1;
 drawingExtras = true;
 
 window.addEventListener('mousemove', mouseMoveHandler);
@@ -100,7 +101,7 @@ function renderCanvas(mousex, mousey) {
     // circle
     ctx.beginPath();
     ctx.arc(0, 0, distanceOrigin, 0, 2 * Math.PI);
-    ctx.strokeStyle = "grey";
+    ctx.strokeStyle = "black";
     ctx.lineWidth = 3;
     ctx.stroke();
    
@@ -120,50 +121,59 @@ function renderCanvas(mousex, mousey) {
     ctx.stroke();
     
   }
-  circleMaths(globalMouseX,globalMouseY, originX, originY, distanceOrigin);
+  circleMaths(globalMouseX,globalMouseY, originX, originY);
 }
 
 function hotkeyHandler(e){
   let x = lastMousePos[0];
   let y = lastMousePos[1];
+
   if(e.key === 'x'){
     clickedPoints = [];
     drawingExtras = false;
   }
   if(e.key === 'z'){
-    if(!drawingExtras){
-      drawingExtras = true;
-    } else {
-      drawingExtras = false;
+    drawingExtras = !drawingExtras;
+  }
+  
+  if(e.ctrlKey && e.key === 'ArrowUp'){
+    keyMoveSpeed += 1;
+  }
+  if(e.ctrlKey && e.key === 'ArrowDown'){
+    keyMoveSpeed -= 1;
+  }
+
+  if(!e.ctrlKey){
+    if(e.key === 'ArrowUp'){
+      lastMousePos = [x,y-keyMoveSpeed];
+      globalMouseY -= keyMoveSpeed;
+      calculateDistanceOrigin();
+    }
+    if(e.key === 'ArrowDown'){
+      lastMousePos = [x,y+keyMoveSpeed];
+      globalMouseY += keyMoveSpeed;
+      calculateDistanceOrigin();
+    }
+    if(e.key === 'ArrowLeft'){
+      lastMousePos = [x-keyMoveSpeed,y];
+      globalMouseX -= keyMoveSpeed;
+      calculateDistanceOrigin();
+    }
+    if(e.key === 'ArrowRight'){
+      lastMousePos = [x+keyMoveSpeed,y];
+      globalMouseX += keyMoveSpeed;
+      calculateDistanceOrigin();
     }
   }
-  if(e.key === 'ArrowUp'){
-    lastMousePos = [x,y-1];
-    globalMouseY -= 1;
-    calculateDistanceOrigin();
-  }
-  if(e.key === 'ArrowDown'){
-    lastMousePos = [x,y+1];
-    globalMouseY += 1;
-    calculateDistanceOrigin();
-  }
-  if(e.key === 'ArrowLeft'){
-    lastMousePos = [x-1,y];
-    globalMouseX -= 1;
-    calculateDistanceOrigin();
-  }
-  if(e.key === 'ArrowRight'){
-    lastMousePos = [x+1,y];
-    globalMouseX += 1;
-    calculateDistanceOrigin();
-  }
+
   if(e.key === 'Enter' || e.key === ' '){
     clickHandler();
   }
   renderCanvas(lastMousePos[0],lastMousePos[1]);
 }
 
-function circleMaths(x, y, a, b, r) {
+
+function circleMaths(x, y, a, b) {
   let coord;
   let output = '';
   if (document.getElementById("tempCoordText")) {
@@ -175,7 +185,7 @@ function circleMaths(x, y, a, b, r) {
   coord.style.position = 'absolute';
   coord.style.top = `${y}px`;
   coord.style.left = `${x}px`;
-  coord.style.backgroundColor = 'white';
+  coord.style.backgroundColor = 'rgba(255, 255, 255, 0.75)';
 
   let relX = x - a;
   let relY = y - b;
@@ -186,6 +196,8 @@ function circleMaths(x, y, a, b, r) {
 
   let deg = rad * (180 / Math.PI);
   output += `\nDegrees: ${deg.toFixed(2)}`;
+
+  output += `\nspeed:${keyMoveSpeed}`
   
   coord.textContent = output;
   document.body.appendChild(coord);

@@ -116,6 +116,7 @@ function renderCanvas(mousex, mousey) {
 function hotkeyHandler(e){
   if(e.key === 'x'){
     clickedPoints = [];
+    drawingExtras = false;
     renderCanvas(lastMousePos[0],lastMousePos[1]);
   } else if(e.key === 'z'){
     if(!drawingExtras){

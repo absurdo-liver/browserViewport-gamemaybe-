@@ -10,7 +10,7 @@ var globalMouseY = 100;
 var globalcenterX;
 var globalcenterY;
 var keyMoveSpeed = 1;
-drawingExtras = true;
+drawingExtras = false;
 
 window.addEventListener('mousemove', mouseMoveHandler);
 window.addEventListener('keydown', hotkeyHandler);

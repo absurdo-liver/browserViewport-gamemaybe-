@@ -140,7 +140,10 @@ function hotkeyHandler(e){
     keyMoveSpeed += 1;
   }
   if(e.ctrlKey && e.key === 'ArrowDown'){
-    keyMoveSpeed -= 1;
+    if(keyMoveSpeed > 1){
+      keyMoveSpeed -= 1;
+    }
+    keyMoveSpeed -= 0;
   }
 
   if(!e.ctrlKey){

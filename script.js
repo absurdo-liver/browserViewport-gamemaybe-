@@ -7,6 +7,8 @@ var lastMousePos = [];
 var distanceOrigin = 0;
 var globalMouseX = 0;
 var globalMouseY = 0;
+var globalcenterX;
+var globalcenterY;
 drawingExtras = true;
 
 window.addEventListener('mousemove', mouseMoveHandler);
@@ -15,27 +17,25 @@ canvas.addEventListener('click', clickHandler);
 
 
 function mouseMoveHandler(e){
-  let centerX = resizeHandler()[0];
-  let centerY = resizeHandler()[1];
-  distanceOrigin = Math.round(Math.hypot(e.clientX - centerX, e.clientY - centerY)*1000)/1000;
-  infoText.textContent = `cursor: (${e.clientX}, ${e.clientY})
-center: (${centerX}, ${centerY})
-distance: ${distanceOrigin}px
-` + vectorHandler([centerX,centerY],[e.clientX,e.clientY]);
-  lastMousePos = [e.clientX - centerX,e.clientY - centerY];
+  globalcenterX = resizeHandler()[0];
+  globalcenterY = resizeHandler()[1];
   globalMouseX = e.clientX;
-  globalMouseY =e.clientY;
-  renderCanvas(e.clientX - centerX,e.clientY - centerY);
+  globalMouseY = e.clientY;
+  lastMousePos = [e.clientX - globalcenterX,e.clientY - globalcenterY];
+  calculateDistanceOrigin();
+  infoText.textContent = `cursor: (${e.clientX}, ${e.clientY})
+center: (${globalcenterX}, ${globalcenterY})
+distance: ${distanceOrigin}px
+` + vectorHandler([globalcenterX,globalcenterY],[e.clientX,e.clientY]);
+  renderCanvas(e.clientX - globalcenterX,e.clientY - globalcenterY);
 }
 
-function clickHandler(e) {
-  let centerX = resizeHandler()[0];
-  let centerY = resizeHandler()[1];
+function clickHandler() {
   clickedPoints.push({
-    x: e.clientX - centerX,
-    y: e.clientY - centerY
+    x: lastMousePos[0],
+    y: lastMousePos[1]
   });
-  renderCanvas(e.clientX - centerX,e.clientY - centerY);
+  renderCanvas(lastMousePos[0],lastMousePos[1]);
 }
 
 function resizeHandler(){
@@ -48,6 +48,10 @@ function vectorHandler(origin, coordinates){
   let x = coordinates[0] - origin[0];
   let y = coordinates[1] - origin[1];
   return `v = (${x}, ${y})`;
+}
+
+function calculateDistanceOrigin(){
+  distanceOrigin = Math.round(Math.hypot(globalMouseX - globalcenterX, globalMouseY - globalcenterY)*1000)/1000;
 }
 
 function drawPoint(ctx, x, y) {
@@ -120,10 +124,11 @@ function renderCanvas(mousex, mousey) {
 }
 
 function hotkeyHandler(e){
+  let x = lastMousePos[0];
+  let y = lastMousePos[1];
   if(e.key === 'x'){
     clickedPoints = [];
     drawingExtras = false;
-    renderCanvas(lastMousePos[0],lastMousePos[1]);
   }
   if(e.key === 'z'){
     if(!drawingExtras){
@@ -131,11 +136,31 @@ function hotkeyHandler(e){
     } else {
       drawingExtras = false;
     }
-    renderCanvas(lastMousePos[0],lastMousePos[1]);
   }
   if(e.key === 'ArrowUp'){
-    // add arrow key movement logic here
+    lastMousePos = [x,y-1];
+    globalMouseY -= 1;
+    calculateDistanceOrigin();
   }
+  if(e.key === 'ArrowDown'){
+    lastMousePos = [x,y+1];
+    globalMouseY += 1;
+    calculateDistanceOrigin();
+  }
+  if(e.key === 'ArrowLeft'){
+    lastMousePos = [x-1,y];
+    globalMouseX -= 1;
+    calculateDistanceOrigin();
+  }
+  if(e.key === 'ArrowRight'){
+    lastMousePos = [x+1,y];
+    globalMouseX += 1;
+    calculateDistanceOrigin();
+  }
+  if(e.key === 'Enter' || e.key === ' '){
+    clickHandler();
+  }
+  renderCanvas(lastMousePos[0],lastMousePos[1]);
 }
 
 function circleMaths(x, y, a, b, r) {
@@ -165,6 +190,7 @@ function circleMaths(x, y, a, b, r) {
   coord.textContent = output;
   document.body.appendChild(coord);
 }
+
 
 
 

@@ -100,23 +100,23 @@ function renderCanvas(mousex, mousey) {
     ctx.lineWidth = 3;
     ctx.stroke();
    
-    // vertical line
-    ctx.beginPath();
-    ctx.strokeStyle = 'red';
-    ctx.lineWidth = 2;
-    ctx.moveTo(mousex, 0);
-    ctx.lineTo(mousex, mousey);
-    ctx.stroke();
     // horizontal line
     ctx.beginPath();
     ctx.strokeStyle = 'red';
     ctx.lineWidth = 2;
     ctx.moveTo(0, 0);
-    ctx.lineTo(mousex, 0);
+    ctx.lineTo(distanceOrigin, 0);
     ctx.stroke();
-
+    // diagonal line
+    ctx.beginPath();
+    ctx.strokeStyle = 'red';
+    ctx.lineWidth = 2;
+    ctx.moveTo(distanceOrigin, 0);
+    ctx.lineTo(mousex, mousey);
+    ctx.stroke();
+    
   }
-  circleMaths(globalMouseX,globalMouseY);
+  circleMaths(globalMouseX,globalMouseY, originX, originY, distanceOrigin);
 }
 
 function hotkeyHandler(e){
@@ -124,28 +124,48 @@ function hotkeyHandler(e){
     clickedPoints = [];
     drawingExtras = false;
     renderCanvas(lastMousePos[0],lastMousePos[1]);
-  } else if(e.key === 'z'){
+  }
+  if(e.key === 'z'){
     if(!drawingExtras){
       drawingExtras = true;
     } else {
       drawingExtras = false;
     }
     renderCanvas(lastMousePos[0],lastMousePos[1]);
-  } else {return}
+  }
+  if(e.key === 'ArrowUp'){
+    // add arrow key movement logic here
+  }
 }
 
-function circleMaths(x,y){
+function circleMaths(x, y, a, b, r) {
   let coord;
-  if(document.getElementById("tempCoordText")){document.getElementById("tempCoordText").remove()}
+  let output = '';
+  if (document.getElementById("tempCoordText")) {
+    document.getElementById("tempCoordText").remove();
+  }
+
   coord = document.createElement('p');
   coord.id = 'tempCoordText';
   coord.style.position = 'absolute';
   coord.style.top = `${y}px`;
   coord.style.left = `${x}px`;
-  coord.textContent = `(${x}, ${y})`;
   coord.style.backgroundColor = 'white';
+
+  let relX = x - a;
+  let relY = y - b;
+  output += `Relative: (${relX.toFixed(2)}, ${relY.toFixed(2)})`;
+
+  let rad = Math.atan2(relY, relX);
+  output += `\nRadians: ${rad.toFixed(2)}`;
+
+  let deg = rad * (180 / Math.PI);
+  output += `\nDegrees: ${deg.toFixed(2)}`;
+  
+  coord.textContent = output;
   document.body.appendChild(coord);
 }
+
 
 
 renderCanvas(0,0);

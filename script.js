@@ -4,9 +4,9 @@ const ctx = canvas.getContext('2d');
 
 var clickedPoints = [];
 var lastMousePos = [];
-var distanceOrigin = 50;
-var globalMouseX = 100;
-var globalMouseY = 100;
+var globalMouseX = 200;
+var globalMouseY = 200;
+var distanceOrigin;
 var globalcenterX;
 var globalcenterY;
 var keyMoveSpeed = 1;
@@ -203,7 +203,16 @@ function circleMaths(x, y, a, b) {
   document.body.appendChild(coord);
 }
 
+function init(){
+  globalcenterX = resizeHandler()[0];
+  globalcenterY = resizeHandler()[1];
+  lastMousePos = [globalMouseX - globalcenterX,globalMouseY - globalcenterY];
+  calculateDistanceOrigin();
+  infoText.textContent = `cursor: (${globalMouseX}, ${globalMouseY})
+center: (${globalcenterX}, ${globalcenterY})
+distance: ${distanceOrigin}px
+` + vectorHandler([globalcenterX,globalcenterY],[globalMouseX,globalMouseY]);
+  renderCanvas(globalMouseX - globalcenterX,globalMouseY - globalcenterY);
+}
 
-
-
-renderCanvas(0,0);
+init();

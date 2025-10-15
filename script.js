@@ -1,7 +1,14 @@
+// Author: Olivier LeGallee | latest update: Oct. 15th 2025 10:50am 
+// Uploaded to GitHub repository: "browserViewport-gamemaybe-", by user: "absurdo-liver" 
+// absurdo-liver => absurd-oliver alternative account | managed by the author 
+// start of script.js file
+
+// declare constants
 const infoText = document.getElementById('infoText');
 const canvas = document.getElementById('cartesianCanvas');
 const ctx = canvas.getContext('2d');
 
+// declare variables, to be dynamically updated
 var clickedPoints = [];
 var lastMousePos = [];
 var globalMouseX = 400;
@@ -17,11 +24,12 @@ var keyMoveSpeed = 1;
 var drawingExtras = false;
 var mouseMove = true;
 
+// event listeners
 window.addEventListener('mousemove', mouseMoveHandler);
 window.addEventListener('keydown', hotkeyHandler);
 canvas.addEventListener('click', clickHandler);
 
-
+// mouse movement handler, handle mouse movement
 function mouseMoveHandler(e) {
 	if (mouseMove) {
 		globalcenterX = resizeHandler()[0];
@@ -38,12 +46,14 @@ function mouseMoveHandler(e) {
 	}
 }
 
+// delta speed handler, handle speed calculations, somewhat misleading name (oops)
 function deltaSpeedHandler() {
 	delta2 = delta1;
 	delta1 = [globalMouseX, globalMouseY];
 	deltaSpeed = Math.round(Math.hypot(delta1[0] - delta2[0], delta1[1] - delta2[1]) * 1000) / 1000;
 }
 
+// inforamtion text handler, handle dynamic updating of information text
 function infoTextHandler() {
 	infoText.textContent = `cursor: (${globalMouseX}, ${globalMouseY})
   center: (${globalcenterX}, ${globalcenterY})
@@ -51,6 +61,7 @@ function infoTextHandler() {
   ` + vectorHandler([globalcenterX, globalcenterY], [globalMouseX, globalMouseY]);
 }
 
+// click handler, handle adding points to be drawn and saving their position, somewhat misleading name again (oops.v2)
 function clickHandler() {
 	clickedPoints.push({
 		x: lastMousePos[0],
@@ -59,22 +70,26 @@ function clickHandler() {
 	renderCanvas(lastMousePos[0], lastMousePos[1]);
 }
 
+// resize handler, handle calculations updating stored width and height in case of window resize
 function resizeHandler() {
 	let centerX = Math.round(window.innerWidth / 2);
 	let centerY = Math.round(window.innerHeight / 2);
 	return [centerX, centerY];
 }
 
+// vector handler, handle calculating vector and display text
 function vectorHandler(origin, coordinates) {
 	let x = coordinates[0] - origin[0];
 	let y = coordinates[1] - origin[1];
 	return `v = (${x}, ${y})`;
 }
 
+// calculate distance origin, handle calculating distance from origin
 function calculateDistanceOrigin() {
 	distanceOrigin = Math.round(Math.hypot(globalMouseX - globalcenterX, globalMouseY - globalcenterY) * 1000) / 1000;
 }
 
+// draw point, handle drawing a single point, called be renderCanvas() that uses stored info provided by clickHandler()
 function drawPoint(ctx, x, y) {
 	ctx.fillStyle = 'black';
 	ctx.beginPath();
@@ -82,6 +97,7 @@ function drawPoint(ctx, x, y) {
 	ctx.fill();
 }
 
+// render canvas, handle rendering canvas and all its components, excluding single points (handled by calling drawPoint())
 function renderCanvas(mousex, mousey) {
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
@@ -161,6 +177,7 @@ function renderCanvas(mousex, mousey) {
 	cursorDisplay(globalMouseX, globalMouseY, originX, originY);
 }
 
+// hotkey handler, handle hotkey commands, inluding movement keys
 function hotkeyHandler(e) {
 	let x = lastMousePos[0];
 	let y = lastMousePos[1];
@@ -227,7 +244,7 @@ function hotkeyHandler(e) {
 	renderCanvas(lastMousePos[0], lastMousePos[1]);
 }
 
-
+// cursor display, handle text display @ cursor
 function cursorDisplay(x, y, a, b) {
 	let coord;
 	let output = '';
@@ -243,9 +260,10 @@ function cursorDisplay(x, y, a, b) {
 	coord = document.createElement('p');
 	coord.id = 'tempCoordText';
 	coord.style.position = 'absolute';
+	coord.style.backgroundColor = 'rgba(255, 255, 255, 0.75)';
 	coord.style.top = `${y}px`;
 	coord.style.left = `${x}px`;
-	coord.style.backgroundColor = 'rgba(255, 255, 255, 0.75)';
+
 
 	output += `Relative: (${relX.toFixed(2)}, ${relY.toFixed(2)})`;
 	if (drawingExtras) {
@@ -263,6 +281,7 @@ function cursorDisplay(x, y, a, b) {
 	document.body.appendChild(coord);
 }
 
+// initialization, handles initialization
 function init() {
 	globalcenterX = resizeHandler()[0];
 	globalcenterY = resizeHandler()[1];
@@ -275,4 +294,5 @@ function init() {
 	renderCanvas(globalMouseX - globalcenterX, globalMouseY - globalcenterY);
 }
 
-init();
+// run only once DOM content is loaded, call init()
+window.addEventListener("DOMContentLoaded", init);

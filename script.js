@@ -4,17 +4,18 @@ const ctx = canvas.getContext('2d');
 
 var clickedPoints = [];
 var lastMousePos = [];
-var globalMouseX = 200;
+var globalMouseX = 400;
 var globalMouseY = 200;
 var delta1 = [0,0];
 var delta2 = [0,0];
 var deltaSpeed = 0;
+var piRel = 0;
 var distanceOrigin;
 var globalcenterX;
 var globalcenterY;
 var keyMoveSpeed = 1;
-var drawingExtras = false;
-var mouseMove = true;
+var drawingExtras = true;   // change these for deploy !!!
+var mouseMove = false;      // change these for deploy !!!
 
 window.addEventListener('mousemove', mouseMoveHandler);
 window.addEventListener('keydown', hotkeyHandler);
@@ -150,8 +151,14 @@ function renderCanvas(mousex, mousey) {
     ctx.lineTo(mousex, mousey);
     ctx.stroke();
     
+
+    ctx.beginPath();
+    ctx.arc(0, 0, distanceOrigin/10, piRel * Math.PI, 0);
+    ctx.strokeStyle = "black";
+    ctx.lineWidth = 3;
+    ctx.stroke();
   }
-  circleMaths(globalMouseX,globalMouseY, originX, originY);
+  cursorDisplay(globalMouseX,globalMouseY, originX, originY);
 }
 
 function hotkeyHandler(e){
@@ -221,9 +228,14 @@ function hotkeyHandler(e){
 }
 
 
-function circleMaths(x, y, a, b) {
+function cursorDisplay(x, y, a, b) {
   let coord;
   let output = '';
+  let relX = x - a;
+  let relY = y - b;
+  let deg = Math.abs(Math.atan2(relY, relX)) * (180 / Math.PI);
+  piRel = Math.atan2(relY, relX)/Math.PI;
+
   if (document.getElementById("tempCoordText")) {
     document.getElementById("tempCoordText").remove();
   }
@@ -235,20 +247,18 @@ function circleMaths(x, y, a, b) {
   coord.style.left = `${x}px`;
   coord.style.backgroundColor = 'rgba(255, 255, 255, 0.75)';
 
-  let relX = x - a;
-  let relY = y - b;
   output += `Relative: (${relX.toFixed(2)}, ${relY.toFixed(2)})`;
-
-  let rad = Math.atan2(relY, relX);
-  let deg = rad * (180 / Math.PI);
   if (drawingExtras){
-    output += `\nRadians: ${rad.toFixed(2)}`;
-    output += `\nDegrees: ${deg.toFixed(2)}`;
+    if(piRel <= 0){
+      output += `\nPi: ${Math.abs(piRel).toFixed(2)}`;
+      output += `\nDegrees: ${deg.toFixed(2)}`;
+    } else {
+      output += `\nPi: ${Math.abs(2-piRel).toFixed(2)}`;
+      output += `\nDegrees: ${(360-deg).toFixed(2)}`;
+    }
   }
   output += `\nspeed(keys):${keyMoveSpeed}`;
-
   output += `\nspeed(Δ):${deltaSpeed}`;
-  
   coord.textContent = output;
   document.body.appendChild(coord);
 }

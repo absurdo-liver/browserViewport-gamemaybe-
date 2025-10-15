@@ -209,11 +209,11 @@ function circleMaths(x, y, a, b) {
   output += `Relative: (${relX.toFixed(2)}, ${relY.toFixed(2)})`;
 
   let rad = Math.atan2(relY, relX);
-  output += `\nRadians: ${rad.toFixed(2)}`;
-
   let deg = rad * (180 / Math.PI);
-  output += `\nDegrees: ${deg.toFixed(2)}`;
-
+  if (drawingExtras){
+    output += `\nRadians: ${rad.toFixed(2)}`;
+    output += `\nDegrees: ${deg.toFixed(2)}`;
+  }
   output += `\nspeed:${keyMoveSpeed}`
   
   coord.textContent = output;

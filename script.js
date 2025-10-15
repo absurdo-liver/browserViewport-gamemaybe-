@@ -1,6 +1,7 @@
-// Author: Olivier LeGallee | latest update: Oct. 15th 2025 10:50am 
-// Uploaded to GitHub repository: "browserViewport-gamemaybe-", by user: "absurdo-liver" 
-// absurdo-liver => absurd-oliver alternative account | managed by the author 
+// Author: Olivier LeGallee | latest update: Oct. 15th 2025 11:00am
+// Uploaded to GitHub repository: "browserViewport-gamemaybe-", by user: "absurdo-liver"
+// absurdo-liver => absurd-oliver alternative account | managed by the author
+// P.S all "console.log()" functions log debug information to the JavaScript console
 // start of script.js file
 
 // declare constants
@@ -41,7 +42,9 @@ function mouseMoveHandler(e) {
 		deltaSpeedHandler();
 		infoTextHandler();
 		renderCanvas(e.clientX - globalcenterX, e.clientY - globalcenterY);
+    console.log('ran mouseMoveHandler() with mouseMove');
 	} else {
+    console.log('ran mouseMoveHandler() without mouseMove');
 		return
 	}
 }
@@ -51,6 +54,7 @@ function deltaSpeedHandler() {
 	delta2 = delta1;
 	delta1 = [globalMouseX, globalMouseY];
 	deltaSpeed = Math.round(Math.hypot(delta1[0] - delta2[0], delta1[1] - delta2[1]) * 1000) / 1000;
+  console.log('ran deltaSpeedHandler() & updated deltaSpeed & co.');
 }
 
 // inforamtion text handler, handle dynamic updating of information text
@@ -59,6 +63,7 @@ function infoTextHandler() {
   center: (${globalcenterX}, ${globalcenterY})
   distance: ${distanceOrigin}px
   ` + vectorHandler([globalcenterX, globalcenterY], [globalMouseX, globalMouseY]);
+  console.log('ran infoTextHandler() & updated infoText');
 }
 
 // click handler, handle adding points to be drawn and saving their position, somewhat misleading name again (oops.v2)
@@ -68,12 +73,14 @@ function clickHandler() {
 		y: lastMousePos[1]
 	});
 	renderCanvas(lastMousePos[0], lastMousePos[1]);
+  console.log('ran clickHandler(), updated clickedPoints & called renderCanvas()');
 }
 
 // resize handler, handle calculations updating stored width and height in case of window resize
 function resizeHandler() {
 	let centerX = Math.round(window.innerWidth / 2);
 	let centerY = Math.round(window.innerHeight / 2);
+  console.log('ran resizeHandler(), updated centerX|centerY & called returned them');
 	return [centerX, centerY];
 }
 
@@ -81,12 +88,14 @@ function resizeHandler() {
 function vectorHandler(origin, coordinates) {
 	let x = coordinates[0] - origin[0];
 	let y = coordinates[1] - origin[1];
+  console.log('ran vectorHandler() & updated vector text');
 	return `v = (${x}, ${y})`;
 }
 
 // calculate distance origin, handle calculating distance from origin
 function calculateDistanceOrigin() {
 	distanceOrigin = Math.round(Math.hypot(globalMouseX - globalcenterX, globalMouseY - globalcenterY) * 1000) / 1000;
+  console.log('ran calculateDistanceOrigin() & updated distanceOrigin');
 }
 
 // draw point, handle drawing a single point, called be renderCanvas() that uses stored info provided by clickHandler()
@@ -95,6 +104,7 @@ function drawPoint(ctx, x, y) {
 	ctx.beginPath();
 	ctx.arc(x, y, 2, 0, Math.PI * 2, true);
 	ctx.fill();
+  console.log('ran drawPoint() & rendered point');
 }
 
 // render canvas, handle rendering canvas and all its components, excluding single points (handled by calling drawPoint())
@@ -175,6 +185,7 @@ function renderCanvas(mousex, mousey) {
 		ctx.stroke();
 	}
 	cursorDisplay(globalMouseX, globalMouseY, originX, originY);
+  console.log('ran renderCanvas() & rendered canvas & co.');
 }
 
 // hotkey handler, handle hotkey commands, inluding movement keys
@@ -242,6 +253,7 @@ function hotkeyHandler(e) {
 	infoTextHandler();
 	deltaSpeedHandler();
 	renderCanvas(lastMousePos[0], lastMousePos[1]);
+  console.log('ran hotkeyHandler() & handled hotkeys');
 }
 
 // cursor display, handle text display @ cursor
@@ -279,6 +291,7 @@ function cursorDisplay(x, y, a, b) {
 	output += `\nspeed(Δ):${deltaSpeed}`;
 	coord.textContent = output;
 	document.body.appendChild(coord);
+  console.log('ran cursorDisplay(), updated & appended coords');
 }
 
 // initialization, handles initialization
@@ -292,6 +305,7 @@ function init() {
   distance: ${distanceOrigin}px
   ` + vectorHandler([globalcenterX, globalcenterY], [globalMouseX, globalMouseY]);
 	renderCanvas(globalMouseX - globalcenterX, globalMouseY - globalcenterY);
+  console.log('ran init() & initialized');
 }
 
 // run only once DOM content is loaded, call init()

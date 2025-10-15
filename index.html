@@ -1,13 +1,25 @@
+<!-- Author: Olivier LeGallee | latest update: Oct. 15th 2025 10:20am -->
+<!-- Uploaded to GitHub repository: "browserViewport-gamemaybe-", by user: "absurdo-liver" -->
+<!-- absurdo-liver => absurd-oliver alternative account | managed by the author -->
+<!-- start of index.html file | CSS & JavaScript aren't included in this page -->
 <!DOCTYPE html>
 <html>
+  <!-- head tag -->
   <head>
+    <!-- meta tag | ensure browser uses the correct character encoding -->
     <meta charset="utf-8">
+    <!-- page title -->
     <title>f*cking around</title>
+    <!-- script tag | links JavaScript -->
     <script src="script.js" defer></script>
+    <!-- link tag | links CSS -->
     <link rel="stylesheet" href="styles.css" />
   </head>
+  <!-- body tag | contains the page content -->
   <body>
+    <!-- top-left information tab, dynamically updated by JavaScript -->
     <p id='infoText'>(nothing yet...)</p>
+    <!-- bottom-left information tab, partially dynamically updated by JavaScript, displays controls -->
     <div id='controlsTab'>
       <p>- x: delete all points</p>
       <p>- z: toggle circle</p>
@@ -15,6 +27,8 @@
       <p>- mouse1/space/enter: place point</p>
       <p>- c: toggle mouse move <span id='mouseMoveToggleShow'>(on)</span></p>
     </div>
+    <!-- canvas tag | displays graph, lines/vector(s) & points -->
     <canvas id="cartesianCanvas" width="400" height="400"></canvas>
   </body>
 </html>
+<!-- end of index.html file -->

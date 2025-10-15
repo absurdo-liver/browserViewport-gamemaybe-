@@ -4,7 +4,7 @@
  ---
 
 - [README.md](https://github.com/absurdo-liver/browserViewport-gamemaybe-/blob/main/README.md) | ( this file )
-- [index.html](https://github.com/absurdo-liver/math-shiiii/blob/main/index.html)
+- [index.html](https://github.com/absurdo-liver/browserViewport-gamemaybe-/blob/main/index.html)
 - [script.js](https://github.com/absurdo-liver/browserViewport-gamemaybe-/blob/main/script.js)
 - [styles.css](https://github.com/absurdo-liver/browserViewport-gamemaybe-/blob/main/styles.css)
 

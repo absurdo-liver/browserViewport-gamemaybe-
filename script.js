@@ -10,7 +10,8 @@ var distanceOrigin;
 var globalcenterX;
 var globalcenterY;
 var keyMoveSpeed = 1;
-drawingExtras = false;
+var drawingExtras = false;
+var mouseMove = true;
 
 window.addEventListener('mousemove', mouseMoveHandler);
 window.addEventListener('keydown', hotkeyHandler);
@@ -18,7 +19,8 @@ canvas.addEventListener('click', clickHandler);
 
 
 function mouseMoveHandler(e){
-  globalcenterX = resizeHandler()[0];
+  if(mouseMove){
+   globalcenterX = resizeHandler()[0];
   globalcenterY = resizeHandler()[1];
   globalMouseX = e.clientX;
   globalMouseY = e.clientY;
@@ -28,7 +30,10 @@ function mouseMoveHandler(e){
 center: (${globalcenterX}, ${globalcenterY})
 distance: ${distanceOrigin}px
 ` + vectorHandler([globalcenterX,globalcenterY],[e.clientX,e.clientY]);
-  renderCanvas(e.clientX - globalcenterX,e.clientY - globalcenterY);
+  renderCanvas(e.clientX - globalcenterX,e.clientY - globalcenterY); 
+  } else {
+    return
+  }
 }
 
 function clickHandler() {
@@ -145,6 +150,15 @@ function hotkeyHandler(e){
   }
   if(e.key === 'z'){
     drawingExtras = !drawingExtras;
+  }
+  if(e.key === 'c'){
+    mouseMove = !mouseMove;
+    if(!mouseMove){
+      document.getElementById('mouseMoveToggleShow').textContent = '(off)';
+    } else {
+      document.getElementById('mouseMoveToggleShow').textContent = '(on)';
+    }
+    
   }
   
   if(e.ctrlKey && e.key === 'ArrowUp'){

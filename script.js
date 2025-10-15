@@ -6,6 +6,9 @@ var clickedPoints = [];
 var lastMousePos = [];
 var globalMouseX = 200;
 var globalMouseY = 200;
+var delta1 = [0,0];
+var delta2 = [0,0];
+var deltaSpeed = 0;
 var distanceOrigin;
 var globalcenterX;
 var globalcenterY;
@@ -20,20 +23,31 @@ canvas.addEventListener('click', clickHandler);
 
 function mouseMoveHandler(e){
   if(mouseMove){
-   globalcenterX = resizeHandler()[0];
+  globalcenterX = resizeHandler()[0];
   globalcenterY = resizeHandler()[1];
   globalMouseX = e.clientX;
   globalMouseY = e.clientY;
   lastMousePos = [e.clientX - globalcenterX,e.clientY - globalcenterY];
   calculateDistanceOrigin();
-  infoText.textContent = `cursor: (${e.clientX}, ${e.clientY})
-center: (${globalcenterX}, ${globalcenterY})
-distance: ${distanceOrigin}px
-` + vectorHandler([globalcenterX,globalcenterY],[e.clientX,e.clientY]);
+  deltaSpeedHandler();
+  infoTextHandler();
   renderCanvas(e.clientX - globalcenterX,e.clientY - globalcenterY); 
   } else {
     return
   }
+}
+
+function deltaSpeedHandler(){
+  delta2 = delta1;
+  delta1 = [globalMouseX,globalMouseY];
+  deltaSpeed = Math.round(Math.hypot(delta1[0] - delta2[0], delta1[1] - delta2[1])*1000)/1000;
+}
+
+function infoTextHandler(){
+  infoText.textContent = `cursor: (${globalMouseX}, ${globalMouseY})
+center: (${globalcenterX}, ${globalcenterY})
+distance: ${distanceOrigin}px
+` + vectorHandler([globalcenterX,globalcenterY],[globalMouseX,globalMouseY]);
 }
 
 function clickHandler() {
@@ -200,6 +214,9 @@ function hotkeyHandler(e){
   if(e.key === 'Enter' || e.key === ' '){
     clickHandler();
   }
+  
+  infoTextHandler();
+  deltaSpeedHandler();
   renderCanvas(lastMousePos[0],lastMousePos[1]);
 }
 
@@ -228,7 +245,9 @@ function circleMaths(x, y, a, b) {
     output += `\nRadians: ${rad.toFixed(2)}`;
     output += `\nDegrees: ${deg.toFixed(2)}`;
   }
-  output += `\nspeed:${keyMoveSpeed}`
+  output += `\nspeed(keys):${keyMoveSpeed}`;
+
+  output += `\nspeed(Δ):${deltaSpeed}`;
   
   coord.textContent = output;
   document.body.appendChild(coord);

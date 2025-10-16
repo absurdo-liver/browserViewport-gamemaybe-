@@ -1,6 +1,5 @@
 const canvas = document.getElementById('cartesianCanvas');
 const ctx = canvas.getContext('2d');
-const gridSize = window.innerWidth / 20;
 const testobj = document.getElementById('testobj');
 const ctrlStatus = document.getElementById('ctrlStatus');
 const altStatus = document.getElementById('altStatus');
@@ -15,6 +14,12 @@ let globalMouseY = 200;
 let ctrlIsPressed = false;
 let altIsPressed = false;
 let shiftIsPressed = false;
+
+var pastWidth = 0;
+var pastHeight = 0;
+var currentWidth = window.innerWidth;
+var currentHeight = window.innerHeight;
+var gridSize = window.innerWidth / 20;
 
 const lastPosition = [];
 
@@ -51,19 +56,17 @@ function windowSizeHandler() {
     const centerX = Math.round(window.innerWidth / 2);
     const centerY = Math.round(window.innerHeight / 2);
     return [centerX, centerY];
-
 }
 
 function renderCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    canvas.width = currentWidth;
+    canvas.height = currentHeight;
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
 
-
     ctx.strokeStyle = 'grey';
     ctx.lineWidth = 1;
-    for (let i = -canvasWidth; i < canvasWidth; i += gridSize) {
+    for (let i = 0; i < canvasWidth; i += gridSize) {
         ctx.beginPath();
 
         ctx.moveTo(i, -canvasHeight); // up-down lines
@@ -198,6 +201,31 @@ function initializeGridPositions() {
         tertomino.style.top = `${snappedY}px`;
     }
 }
+
+
+let gridCheckInterval = setInterval(() => {
+  gridSize = window.innerWidth / 20;
+  currentWidth = window.innerWidth;
+  currentHeight = window.innerHeight;
+  if(currentHeight != pastHeight){renderCanvas();}
+  if(currentWidth != pastWidth){renderCanvas();}
+  pastWidth = currentWidth;
+  pastHeight = currentHeight;
+
+  let elements = document.querySelectorAll('.moveable');
+  elements.forEach(element => {
+    let elementId = element.id;
+    let valueX = window.getComputedStyle(element).left;
+    let valueY = window.getComputedStyle(element).top;
+    let numValueX = parseInt(valueX, 10) || 0;
+    let numValueY = parseInt(valueY, 10) || 0;
+    let snappedX = Math.round(numValueX / gridSize) * gridSize;
+    let snappedY = Math.round(numValueY / gridSize) * gridSize;
+    document.getElementById(elementId).style.left = `${snappedX}px`;
+    document.getElementById(elementId).style.top = `${snappedY}px`;
+  });
+}, 100);
+
 
 
 requestAnimationFrame(renderCanvas);

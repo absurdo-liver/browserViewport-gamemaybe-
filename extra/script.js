@@ -72,7 +72,7 @@ function renderCanvas() {
         ctx.stroke();
     }
 
-    for (let i = -canvasHeight; i < canvasHeight; i += gridSize) {
+    for (let i = 0; i < canvasHeight; i += gridSize) {
         ctx.beginPath();
 
         ctx.moveTo(-canvasWidth, i); // left-right lines    

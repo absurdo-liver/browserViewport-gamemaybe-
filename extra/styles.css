@@ -1,0 +1,38 @@
+body {
+            margin: 0;
+        }
+
+        canvas {
+            position: absolute;
+            margin: 0;
+            z-index: 0;
+        }
+
+        #testobj {
+            font-size: 150%;
+            position: absolute;
+            margin: 0;
+            top: 25%;
+            left: 25%;
+            z-index: 1;
+        }
+
+        .held {
+            transition: ease-in-out 0.1s;
+        }
+
+        .Status {
+            position: absolute;
+            margin: 0;
+            z-index: 1;
+        }
+
+        .tertominoes {
+            position: absolute;
+            margin: 0;
+            display: block;
+            background-color: red;
+            width: 5vw;
+            height: 5vw;
+            z-index: 1;
+        }

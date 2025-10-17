@@ -23,7 +23,7 @@ window.addEventListener('keyup', keyEventUp);
 
 funToCall.push({
     func: drawLinearStandard,
-    args: [1, 2, 4, [-5, 5]]
+    args: [0.25, 2, -2, [-8, 8]]
 });
 
 funToCall.push({
@@ -47,7 +47,6 @@ function callerFunction(){
 
 function drawLinearStandard(a,b,c,limits){
     if (b === 0) return;
-    a = -a;
     if (!limits){
       limits = [-currentWidth / (2 * gridSize), currentWidth / (2 * gridSize)]; 
     }
@@ -106,7 +105,7 @@ function drawExp(a,b,limits){
   if (!limits){
       limits = [-currentWidth / (2 * gridSize), currentWidth / (2 * gridSize)]; 
   }
-  
+
   ctx.strokeStyle = 'green';
     ctx.lineWidth = 2;
     ctx.beginPath();

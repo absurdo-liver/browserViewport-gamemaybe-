@@ -17,49 +17,85 @@ var pastHeight = 0;
 var currentWidth = window.innerWidth;
 var currentHeight = window.innerHeight;
 var currentOrigin = [currentWidth / 2, currentHeight / 2];
+
 var funToCall = [];
 
 window.addEventListener('keydown', keyEventDown);
 window.addEventListener('keyup', keyEventUp);
 selectionBox.addEventListener('change', selection);
+window.addEventListener('mousemove', () => {
+  let output = '';
+
+  for(let i = 0; i < funToCall.length; i++){
+    output += `${funToCall[i].name} | ${funToCall[i].args.join(', ')}\n`;
+  }
+
+  document.getElementById('functionsToCall').textContent = output;
+});
 
 function selection(){
   let opt = selectionBox.value;
-  
-  if(opt === 0){
-    return;
+
+  // show / hides elements accordingly ...
+
+  callRendering(opt);
+
+}
+
+function callRendering(opt){
+//a 
+//b 
+//c 
+//color 
+//limits -> [min, max] 
+//h 
+//k 
+//p 
+//trigRatio 
+//param 
+//sys 
+//r 
+//figure 
+//pointArray
+
+  if(opt === '0'){
+    funToCall.length = 0;
   } else if(opt === 'drawLinearStandard'){
     funToCall.push({
       func: drawLinearStandard,
-      args: [0.25, 2, -2, 'red', [-10, 8]]
+      args: [0.25, 2, -2, 'red', [-10, 8]],
+      name: 'drawLinearStandard'
     });
   } else if(opt === 'drawPolynomialVertex'){
     funToCall.push({
-    func: drawPolynomialVertex,
-    args: [2, 0, -2, 2, 'blue', [-2, 2]]
+      func: drawPolynomialVertex,
+      args: [2, 0, -2, 2, 'blue', [-2, 2]],
+      name: 'drawPolynomialVertex'
     });
   } else if(opt === 'drawExp'){
     funToCall.push({
       func: drawExp,
-      args: [2, 2, 'green', [-3, 3]]
+      args: [2, 2, 'green', [-3, 3]],
+      name: 'drawExp'
     });
   } else if(opt === 'drawTrigRatio'){
     funToCall.push({
       func: drawTrigRatio,
-      args: ['sin', 'x', 1, 0, 0, 'orange']
+      args: ['sin', 'x', 1, 0, 0, 'orange'],
+      name: 'drawTrigRatio'
     });
   } else if(opt === 'drawAngle'){
     funToCall.push({
       func: drawAngle,
-      args: ['rad', 0.125, 5, 'orange']
+      args: ['rad', 0.125, 5, 'orange'],
+      name: 'drawAngle'
     });
   }
-  
 }
 
 function callerFunction() {
     for (let i = 0; i < funToCall.length; i++) {
-        const {
+        let {
             func,
             args
         } = funToCall[i];

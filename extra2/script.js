@@ -52,15 +52,7 @@ window.addEventListener('mousemove', () => {
 function selection(){
   let opt = selectionBox.value;
 
-  // show / hides elements accordingly ...
-
-  callRendering(opt);
-
-}
-
-function callRendering(opt){
-
-// aInput
+  // aInput
 // bInput
 // cInput
 // hInput
@@ -75,6 +67,56 @@ function callRendering(opt){
 // sysInput
 // figureInput
 // pointArrayInput
+
+  if(opt === 'drawLinearStandard'){
+    aInput.classList.remove('hidden')
+    bInput.classList.remove('hidden')
+    cInput.classList.remove('hidden')
+    colorInput.classList.remove('hidden')
+    limitsMinInput.classList.remove('hidden')
+    limitsMaxInput.classList.remove('hidden')
+    
+  } else if(opt === 'drawPolynomialVertex'){
+    aInput.classList.remove('hidden')
+    hInput.classList.remove('hidden')
+    kInput.classList.remove('hidden')
+    pInput.classList.remove('hidden')
+    colorInput.classList.remove('hidden')
+    limitsMinInput.classList.remove('hidden')
+    limitsMaxInput.classList.remove('hidden')    
+  } else if(opt === 'drawExp'){
+    aInput.classList.remove('hidden')
+    bInput.classList.remove('hidden')
+    colorInput.classList.remove('hidden')
+    limitsMinInput.classList.remove('hidden')
+    limitsMaxInput.classList.remove('hidden')    
+  } else if(opt === 'drawTrigRatio'){
+    aInput.classList.remove('hidden')
+    hInput.classList.remove('hidden')
+    kInput.classList.remove('hidden')
+    paramInput.classList.remove('hidden')
+    trigRatioInput.classList.remove('hidden')
+    colorInput.classList.remove('hidden')
+    limitsMinInput.classList.remove('hidden')
+    limitsMaxInput.classList.remove('hidden')
+    
+  } else if(opt === 'drawAngle'){
+    aInput.classList.remove('hidden')
+    rInput.classList.remove('hidden')
+    colorInput.classList.remove('hidden')
+    sysInput.classList.remove('hidden')
+    
+  } else if(opt === 'drawGeometry'){
+    figureInput.classList.remove('hidden')
+    pointArrayInput.classList.remove('hidden')
+    colorInput.classList.remove('hidden')
+  }
+
+  callRendering(opt);
+
+}
+
+function callRendering(opt){
 
   if(opt === '0'){
     funToCall.length = 0;

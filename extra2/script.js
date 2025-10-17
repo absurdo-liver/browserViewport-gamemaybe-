@@ -15,7 +15,7 @@ var pastWidth = 0;
 var pastHeight = 0;
 var currentWidth = window.innerWidth;
 var currentHeight = window.innerHeight;
-var currentOrigin = [currentWidth/2, currentHeight/2];
+var currentOrigin = [currentWidth / 2, currentHeight / 2];
 var funToCall = [];
 
 window.addEventListener('keydown', keyEventDown);
@@ -23,41 +23,55 @@ window.addEventListener('keyup', keyEventUp);
 
 funToCall.push({
     func: drawLinearStandard,
-    args: [0.25, 2, -2, [-8, 8]]
+    args: [0.25, 2, -2, 'red', [-10, 8]]
 });
 
 funToCall.push({
     func: drawPolynomialVertex,
-    args: [2, 0, 0, 2, [-2, 2]]
+    args: [2, 0, -2, 2, 'blue', [-2, 2]]
 });
 
 funToCall.push({
     func: drawExp,
-    args: [2, 2, [-3, 3]]
+    args: [2, 2, 'green', [-3, 3]]
+});
+
+funToCall.push({
+    func: drawTrigRatio,
+    args: ['sin', 'x', 1, 0, 0, 'orange']
+});
+
+funToCall.push({
+    func: drawAngle,
+    args: ['rad', 0.125, 5, 'orange']
 });
 
 
-function callerFunction(){
-  for(let i = 0; i < funToCall.length; i++){
-    const { func, args } = funToCall[i];
-    // Use spread syntax (...) to pass array of arguments to function
-    func(...args); 
-  }
+function callerFunction() {
+    for (let i = 0; i < funToCall.length; i++) {
+        const {
+            func,
+            args
+        } = funToCall[i];
+        // Use spread syntax (...) to pass array of arguments to function
+        func(...args);
+    }
 }
 
-function drawLinearStandard(a,b,c,limits){
+function drawLinearStandard(a, b, c, color, limits) {
     if (b === 0) return;
-    if (!limits){
-      limits = [-currentWidth / (2 * gridSize), currentWidth / (2 * gridSize)]; 
+    if (typeof color != 'string') return;
+    if (!limits) {
+        limits = [-currentWidth / (2 * gridSize), currentWidth / (2 * gridSize)];
     }
 
-    ctx.strokeStyle = 'red';
+    ctx.strokeStyle = color;
     ctx.lineWidth = 2;
     ctx.beginPath();
 
     let firstPoint = true;
 
-    for(let x_cartesian = limits[0]; x_cartesian <= limits[1]; x_cartesian += pointDensity){
+    for (let x_cartesian = limits[0]; x_cartesian <= limits[1]; x_cartesian += pointDensity) {
         let y_cartesian = (c - a * x_cartesian) / b;
 
         let x_canvas = x_cartesian * gridSize + currentOrigin[0];
@@ -73,19 +87,20 @@ function drawLinearStandard(a,b,c,limits){
     ctx.stroke();
 }
 
-function drawPolynomialVertex(a,h,k,p,limits){
-  if (!limits){
-      limits = [-currentWidth / (2 * gridSize), currentWidth / (2 * gridSize)]; 
-  }
+function drawPolynomialVertex(a, h, k, p, color, limits) {
+    if (typeof color != 'string') return;
+    if (!limits) {
+        limits = [-currentWidth / (2 * gridSize), currentWidth / (2 * gridSize)];
+    }
 
-    ctx.strokeStyle = 'orange';
+    ctx.strokeStyle = color;
     ctx.lineWidth = 2;
     ctx.beginPath();
 
     let firstPoint = true;
 
-    for(let x_cartesian = limits[0]; x_cartesian < limits[1] + pointDensity; x_cartesian += pointDensity){
-        let y_cartesian = (a * (x_cartesian - h)**p + k);
+    for (let x_cartesian = limits[0]; x_cartesian < limits[1] + pointDensity; x_cartesian += pointDensity) {
+        let y_cartesian = (a * (x_cartesian - h) ** p + k);
 
         let x_canvas = x_cartesian * gridSize + currentOrigin[0];
         let y_canvas = currentOrigin[1] - y_cartesian * gridSize;
@@ -101,19 +116,20 @@ function drawPolynomialVertex(a,h,k,p,limits){
 }
 
 
-function drawExp(a,b,limits){
-  if (!limits){
-      limits = [-currentWidth / (2 * gridSize), currentWidth / (2 * gridSize)]; 
-  }
+function drawExp(a, b, color, limits) {
+    if (typeof color != 'string') return;
+    if (!limits) {
+        limits = [-currentWidth / (2 * gridSize), currentWidth / (2 * gridSize)];
+    }
 
-  ctx.strokeStyle = 'green';
+    ctx.strokeStyle = color;
     ctx.lineWidth = 2;
     ctx.beginPath();
 
     let firstPoint = true;
 
-    for(let x_cartesian = limits[0]; x_cartesian < limits[1] + pointDensity; x_cartesian += pointDensity){
-        let y_cartesian = (a * (b**x_cartesian));
+    for (let x_cartesian = limits[0]; x_cartesian < limits[1] + pointDensity; x_cartesian += pointDensity) {
+        let y_cartesian = (a * (b ** x_cartesian));
 
         let x_canvas = x_cartesian * gridSize + currentOrigin[0];
         let y_canvas = currentOrigin[1] - y_cartesian * gridSize;
@@ -129,32 +145,114 @@ function drawExp(a,b,limits){
 }
 
 
-function drawTrigRatio(trigRatio, param, a,h,k){
-  // trigRatio:
-  // sin(x,y)
-  // cos(x,y)
-  // tan(x,y)
-  // cot(x,y)
-  // sec(x,y)
-  // csc(x,y)
+function drawTrigRatio(trigRatio, param, a, h, k, color, limits) {
+    let firstPoint = true;
+    let ratioResult;
+    if (typeof color != 'string') return;
+    if (typeof param != 'string') return;
+    if (typeof trigRatio != 'string') return;
+    if (!limits) {
+        limits = [-currentWidth / (2 * gridSize), currentWidth / (2 * gridSize)];
+    }
 
-  // opposite of param = a*trigRatio(param - h) + k
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+
+    if (param === 'x') {
+        for (let x_cartesian = limits[0]; x_cartesian < limits[1] + pointDensity; x_cartesian += pointDensity) {
+            if (trigRatio === 'sin') {
+                ratioResult = Math.sin(x_cartesian - h);
+            } else if (trigRatio === 'cos') {
+                ratioResult = Math.cos(x_cartesian - h);
+            } else if (trigRatio === 'tan') {
+                ratioResult = Math.tan(x_cartesian - h);
+            } else if (trigRatio === 'cot') {
+                ratioResult = 1 / Math.tan(x_cartesian - h);
+            } else if (trigRatio === 'sec') {
+                ratioResult = 1 / Math.cos(x_cartesian - h);
+            } else if (trigRatio === 'csc') {
+                ratioResult = 1 / Math.sin(x_cartesian - h);
+            } else {
+                return;
+            }
+            let y_cartesian = (a * ratioResult + k);
+            let x_canvas = x_cartesian * gridSize + currentOrigin[0];
+            let y_canvas = currentOrigin[1] - y_cartesian * gridSize;
+
+            if (firstPoint) {
+                ctx.moveTo(x_canvas, y_canvas);
+                firstPoint = false;
+            } else {
+                ctx.lineTo(x_canvas, y_canvas);
+            }
+        }
+    } else if (param === 'y') {
+        for (let y_cartesian = limits[0]; y_cartesian < limits[1] + pointDensity; y_cartesian += pointDensity) {
+            if (trigRatio === 'sin') {
+                ratioResult = Math.sin(y_cartesian - h);
+            } else if (trigRatio === 'cos') {
+                ratioResult = Math.cos(y_cartesian - h);
+            } else if (trigRatio === 'tan') {
+                ratioResult = Math.tan(y_cartesian - h);
+            } else if (trigRatio === 'cot') {
+                ratioResult = 1 / Math.tan(y_cartesian - h);
+            } else if (trigRatio === 'sec') {
+                ratioResult = 1 / Math.cos(y_cartesian - h);
+            } else if (trigRatio === 'csc') {
+                ratioResult = 1 / Math.sin(y_cartesian - h);
+            } else {
+                return;
+            }
+            let x_cartesian = (a * ratioResult + k);
+            let x_canvas = x_cartesian * gridSize + currentOrigin[0];
+            let y_canvas = currentOrigin[1] - y_cartesian * gridSize;
+
+            if (firstPoint) {
+                ctx.moveTo(x_canvas, y_canvas);
+                firstPoint = false;
+            } else {
+                ctx.lineTo(x_canvas, y_canvas);
+            }
+        }
+    } else {
+        return
+    }
+    ctx.stroke();
 }
 
-function drawGeometry(figure, pointArray){
-  // self explanitory
+function drawAngle(sys, a, r, color) {
+    // sys = radians or degrees
+    // a = angle
+    if (typeof sys !== 'string' || typeof color !== 'string') return;
+    if (sys !== 'rad' && sys !== 'deg') return;
+    if (typeof a !== 'number' || typeof r !== 'number' || r <= 0) return;
+
+    if (sys === 'deg') {
+        a *= Math.PI / 180;
+    } else if (a > 1) {
+        a %= 1;
+        a *= 2 * Math.PI;
+    } else {
+        a *= 2 * Math.PI;
+    }
+
+
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.arc(currentOrigin[0], currentOrigin[1], r * gridSize, -a, 0);
+    ctx.stroke();
 }
 
-function drawAngles(sys, a){
-  // sys = radians or degrees
-  // a = angle
-
+function drawGeometry(figure, pointArray) {
+    // self explanitory
+    // ctx.beginPath();
+    // ctx.moveTo(x1, y1);
+    // ctx.lineTo(x2, y2);
+    // ctx.stroke();
 }
 
-// ctx.beginPath();
-// ctx.moveTo(x1, y1);
-// ctx.lineTo(x2, y2);
-// ctx.stroke();
 
 function renderCanvas() {
     ctx.clearRect(0, 0, currentWidth, currentHeight);
@@ -173,14 +271,14 @@ function renderCanvas() {
     for (let i = 0; i <= originX; i += gridSize) {
         ctx.beginPath();
         // Right side of origin
-        ctx.moveTo(originX + i, 0); 
+        ctx.moveTo(originX + i, 0);
         ctx.lineTo(originX + i, canvasHeight);
         ctx.stroke();
 
         if (i > 0) {
             ctx.beginPath();
             // Left side of origin
-            ctx.moveTo(originX - i, 0); 
+            ctx.moveTo(originX - i, 0);
             ctx.lineTo(originX - i, canvasHeight);
             ctx.stroke();
         }
@@ -190,19 +288,19 @@ function renderCanvas() {
     for (let i = 0; i <= originY; i += gridSize) {
         ctx.beginPath();
         // Down from origin (positive canvas Y direction)
-        ctx.moveTo(0, originY + i); 
+        ctx.moveTo(0, originY + i);
         ctx.lineTo(canvasWidth, originY + i);
         ctx.stroke();
 
         if (i > 0) {
             ctx.beginPath();
             // Up from origin (negative canvas Y direction)
-            ctx.moveTo(0, originY - i); 
+            ctx.moveTo(0, originY - i);
             ctx.lineTo(canvasWidth, originY - i);
             ctx.stroke();
         }
     }
-    
+
     // Draw X & Y Axes
     ctx.strokeStyle = 'black';
     ctx.lineWidth = 2;
@@ -250,12 +348,13 @@ function keyEventUp(e) {
 }
 
 
+
 let gridCheckInterval = setInterval(() => {
-  gridSize = window.innerWidth / 20;
-  currentWidth = window.innerWidth;
-  currentHeight = window.innerHeight;
-  currentOrigin = [currentWidth/2, currentHeight/2];
-  
+    gridSize = window.innerWidth / 20;
+    currentWidth = window.innerWidth;
+    currentHeight = window.innerHeight;
+    currentOrigin = [currentWidth / 2, currentHeight / 2];
+
 }, 100);
 
 

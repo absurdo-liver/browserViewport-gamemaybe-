@@ -22,6 +22,8 @@
         <option value='drawExp'>Exponential (standard form)</option>
         <option value='drawTrigRatio'>Trig function (vertex form)</option>
         <option value='drawAngle'>Angle (deg/rad)</option>
+        <option value='drawGeometry'>Geometry (figure)</option>
+        <option value='clear'>clear</option>
       </select>
       <button id='drawButton'>draw</button>
     </div>
@@ -31,16 +33,16 @@
       <input type='number' placeholder='c' id='cInput' class='hidden'>
       <input type='number' placeholder='h' id='hInput' class='hidden'>
       <input type='number' placeholder='k' id='kInput' class='hidden'>
-      <input type='number' placeholder='p' id='pInput' class='hidden'>
-      <input type='number' placeholder='r' id='rInput' class='hidden'>
-      <input type='number' placeholder='limitsMin' id='limitsMinInput' class='hidden'>
-      <input type='number' placeholder='limitsMax' id='limitsMaxInput' class='hidden'>
-      <input type='text' placeholder='color' id='colorInput' class='hidden'>
-      <input type='text' placeholder='trigRatio' id='trigRatioInput' class='hidden'>
-      <input type='text' placeholder='param' id='paramInput' class='hidden'>
-      <input type='text' placeholder='sys' id='sysInput' class='hidden'>
+      <input type='number' placeholder='power' id='pInput' class='hidden'>
+      <input type='number' placeholder='radius' id='rInput' class='hidden'>
+      <input type='number' placeholder='limit Min' id='limitsMinInput' class='hidden'>
+      <input type='number' placeholder='limit Max' id='limitsMaxInput' class='hidden'>
+      <input type='text' placeholder='color (text)' id='colorInput' class='hidden'>
+      <input type='text' placeholder='trigRatio (text)' id='trigRatioInput' class='hidden'>
+      <input type='text' placeholder='param (x/y)' id='paramInput' class='hidden'>
+      <input type='text' placeholder='sys (rad/deg)' id='sysInput' class='hidden'>
       <input type='text' placeholder='figure' id='figureInput' class='hidden'>
-      <input type='text' placeholder='pointArray' id='pointArrayInput' class='hidden'>
+      <input type='text' placeholder='pointArray ((x, y),(a, b))' id='pointArrayInput' class='hidden'>
       </div>
     <canvas id="cartesianCanvas" width="400" height="400"></canvas>
 </body>

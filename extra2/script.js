@@ -1,5 +1,6 @@
 const canvas = document.getElementById('cartesianCanvas');
 const ctx = canvas.getContext('2d');
+
 const ctrlStatus = document.getElementById('ctrlStatus');
 const altStatus = document.getElementById('altStatus');
 const shiftStatus = document.getElementById('shiftStatus');
@@ -14,19 +15,71 @@ var currentWidth = window.innerWidth;
 var currentHeight = window.innerHeight;
 var gridSize = window.innerWidth / 20;
 
-const lastPosition = [];
-
-
 window.addEventListener('keydown', keyEventDown);
 window.addEventListener('keyup', keyEventUp);
-
-
 
 function windowSizeHandler() {
     const centerX = Math.round(window.innerWidth / 2);
     const centerY = Math.round(window.innerHeight / 2);
     return [centerX, centerY];
 }
+
+
+
+function drawLinearStandard(a,b,c, limits){
+  // a*x + b*y = c
+  // limits = []
+
+}
+
+function drawLinearVertex(a,b){
+  // y = a*x + b
+}
+
+function drawLinearPointSlope(a,h,k){
+  // y - k = a*(x - h)
+}
+
+function drawPolynomialStandard(a,b,c,p){
+  // y = a*x^p + b*x + c 
+}
+
+function drawPolynomialVertex(a,h,k,p){
+  // y = a*(x - h)^p + k
+}
+
+function drawQuadraticFactored(a,p,q){
+ // y = a*(x - p)*(x - q)
+}
+
+function drawExp(){
+  // y = a * b^x
+}
+
+
+function drawTrigRatio(trigRatio, param, a,h,k){
+  // trigRatio:
+  // sin(x,y)
+  // cos(x,y)
+  // tan(x,y)
+  // cot(x,y)
+  // sec(x,y)
+  // csc(x,y)
+
+  // opposite of param = a*trigRatio(param - h) + k
+}
+
+function drawGeometry(figure, pointArray){
+  // self explanitory
+}
+
+function drawAngles(sys, a){
+  // sys = radians or degrees
+  // a = angle
+
+}
+
+
 
 function renderCanvas() {
     canvas.width = currentWidth;
@@ -87,7 +140,6 @@ function keyEventUp(e) {
         shiftIsPressed = false;
     }
 }
-
 
 
 

@@ -15,6 +15,7 @@ canvas {
 }
 
 .controls {
+  display: table-row;
     position: absolute;
     margin: 0;
     bottom: 0;
@@ -23,4 +24,17 @@ canvas {
 
 #functionsToCall {
   white-space: pre;
+}
+
+.inputs{
+  display: grid;
+  text-align: right;
+  position: absolute;
+  margin: 0;
+  right: 0;
+  z-index: 1;
+}
+
+.hidden {
+  display: none;
 }

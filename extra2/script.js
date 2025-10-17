@@ -4,6 +4,7 @@ const ctx = canvas.getContext('2d');
 const ctrlStatus = document.getElementById('ctrlStatus');
 const altStatus = document.getElementById('altStatus');
 const shiftStatus = document.getElementById('shiftStatus');
+const selectionBox = document.getElementById('selectionBox');
 
 let ctrlIsPressed = false;
 let altIsPressed = false;
@@ -20,32 +21,41 @@ var funToCall = [];
 
 window.addEventListener('keydown', keyEventDown);
 window.addEventListener('keyup', keyEventUp);
+selectionBox.addEventListener('change', selection);
 
-funToCall.push({
-    func: drawLinearStandard,
-    args: [0.25, 2, -2, 'red', [-10, 8]]
-});
-
-funToCall.push({
+function selection(){
+  let opt = selectionBox.value;
+  
+  if(opt === 0){
+    return;
+  } else if(opt === 'drawLinearStandard'){
+    funToCall.push({
+      func: drawLinearStandard,
+      args: [0.25, 2, -2, 'red', [-10, 8]]
+    });
+  } else if(opt === 'drawPolynomialVertex'){
+    funToCall.push({
     func: drawPolynomialVertex,
     args: [2, 0, -2, 2, 'blue', [-2, 2]]
-});
-
-funToCall.push({
-    func: drawExp,
-    args: [2, 2, 'green', [-3, 3]]
-});
-
-funToCall.push({
-    func: drawTrigRatio,
-    args: ['sin', 'x', 1, 0, 0, 'orange']
-});
-
-funToCall.push({
-    func: drawAngle,
-    args: ['rad', 0.125, 5, 'orange']
-});
-
+    });
+  } else if(opt === 'drawExp'){
+    funToCall.push({
+      func: drawExp,
+      args: [2, 2, 'green', [-3, 3]]
+    });
+  } else if(opt === 'drawTrigRatio'){
+    funToCall.push({
+      func: drawTrigRatio,
+      args: ['sin', 'x', 1, 0, 0, 'orange']
+    });
+  } else if(opt === 'drawAngle'){
+    funToCall.push({
+      func: drawAngle,
+      args: ['rad', 0.125, 5, 'orange']
+    });
+  }
+  
+}
 
 function callerFunction() {
     for (let i = 0; i < funToCall.length; i++) {
@@ -57,6 +67,7 @@ function callerFunction() {
         func(...args);
     }
 }
+
 
 function drawLinearStandard(a, b, c, color, limits) {
     if (b === 0) return;

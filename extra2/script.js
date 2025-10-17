@@ -134,8 +134,35 @@ function callRendering(opt){
       args: [sys, a, r, color],
       name: 'drawAngle'
     });
+  } else if(opt === 'drawGeometry'){
+    let figure = figureInput.value;
+    let pointArray = pointArrayParse(pointArrayInput.value);
+    let color = colorInput.value;
+    funToCall.push({
+      func: drawAngle,
+      args: [figure, pointArray, color],
+      name: 'drawAngle'
+    });
   }
 }
+
+function pointArrayParse(textToParse){
+  let output = [];
+  textToParse = textToParse.replaceAll(' ', '');
+  textToParse = textToParse.replace('(', '');
+  textToParse = textToParse.replaceAll('),(', '|');
+  textToParse = textToParse.replace(')', '');
+  textToParse = textToParse.split('|');
+  for (let i = 0; i < textToParse.length; i++){
+    let text = {
+      x: parseInt(textToParse[i].toString().split(',')[0]), 
+      y: parseInt(textToParse[i].toString().split(',')[1])
+    };
+    output.push(text);
+  }
+  return output
+}
+
 
 function callerFunction() {
     for (let i = 0; i < funToCall.length; i++) {
@@ -336,7 +363,7 @@ function drawAngle(sys, a, r, color) {
     ctx.stroke();
 }
 
-function drawGeometry(figure, pointArray) {
+function drawGeometry(figure, pointArray, color) {
     // self explanitory
     // ctx.beginPath();
     // ctx.moveTo(x1, y1);

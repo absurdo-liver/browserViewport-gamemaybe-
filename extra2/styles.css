@@ -13,3 +13,10 @@ canvas {
     margin: 0;
     z-index: 1;
 }
+
+.controls {
+    position: absolute;
+    margin: 0;
+    bottom: 0;
+    z-index: 1;
+}

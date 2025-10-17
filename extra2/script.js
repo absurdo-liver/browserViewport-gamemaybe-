@@ -10,6 +10,22 @@ let ctrlIsPressed = false;
 let altIsPressed = false;
 let shiftIsPressed = false;
 
+const aInput = document.getElementById('aInput');
+const bInput = document.getElementById('bInput');
+const cInput = document.getElementById('cInput');
+const hInput = document.getElementById('hInput');
+const kInput = document.getElementById('kInput');
+const pInput = document.getElementById('pInput');
+const rInput = document.getElementById('rInput');
+const limitsMinInput = document.getElementById('limitsMinInput');
+const limitsMaxInput = document.getElementById('limitsMaxInput');
+const colorInput = document.getElementById('colorInput');
+const trigRatioInput = document.getElementById('trigRatioInput');
+const paramInput = document.getElementById('paramInput');
+const sysInput = document.getElementById('sysInput');
+const figureInput = document.getElementById('figureInput');
+const pointArrayInput = document.getElementById('pointArrayInput');
+
 var gridSize = window.innerWidth / 20;
 var pointDensity = 0.1;
 var pastWidth = 0;
@@ -43,51 +59,79 @@ function selection(){
 }
 
 function callRendering(opt){
-//a 
-//b 
-//c 
-//color 
-//limits -> [min, max] 
-//h 
-//k 
-//p 
-//trigRatio 
-//param 
-//sys 
-//r 
-//figure 
-//pointArray
+
+// aInput
+// bInput
+// cInput
+// hInput
+// kInput
+// pInput
+// rInput
+// limitsMinInput
+// limitsMaxInput
+// colorInput
+// trigRatioInput
+// paramInput
+// sysInput
+// figureInput
+// pointArrayInput
 
   if(opt === '0'){
     funToCall.length = 0;
   } else if(opt === 'drawLinearStandard'){
+    let a = aInput.value;
+    let b = bInput.value;
+    let c = cInput.value;
+    let color = colorInput.value;
+    let limits = [limitsMinInput.value, limitsMaxInput.value];
     funToCall.push({
       func: drawLinearStandard,
-      args: [0.25, 2, -2, 'red', [-10, 8]],
+      args: [a, b, c, color, limits],
       name: 'drawLinearStandard'
     });
   } else if(opt === 'drawPolynomialVertex'){
+    let a = aInput.value;
+    let h = hInput.value;
+    let k = kInput.value;
+    let p = pInput.value;
+    let color = colorInput.value;
+    let limits = [limitsMinInput.value, limitsMaxInput.value];
     funToCall.push({
       func: drawPolynomialVertex,
-      args: [2, 0, -2, 2, 'blue', [-2, 2]],
+      args: [a, h, k, p, color, limits],
       name: 'drawPolynomialVertex'
     });
   } else if(opt === 'drawExp'){
+    let a = aInput.value;
+    let b = bInput.value;
+    let color = colorInput.value;
+    let limits = [limitsMinInput.value, limitsMaxInput.value];
     funToCall.push({
       func: drawExp,
-      args: [2, 2, 'green', [-3, 3]],
+      args: [a, b, color, limits],
       name: 'drawExp'
     });
   } else if(opt === 'drawTrigRatio'){
+    let a = aInput.value;
+    let h = hInput.value;
+    let k = kInput.value;
+    let param = paramInput.value;
+    let trigRatio = trigRatioInput.value;
+    let color = colorInput.value;
+    let limits = [limitsMinInput.value, limitsMaxInput.value];
     funToCall.push({
       func: drawTrigRatio,
-      args: ['sin', 'x', 1, 0, 0, 'orange'],
+      args: [trigRatio, param, a, h, k, color, limits],
       name: 'drawTrigRatio'
     });
   } else if(opt === 'drawAngle'){
+    let a = aInput.value;
+    let r = rInput.value;
+    let color = colorInput.value;
+    let sys = sysInput.value;
     funToCall.push({
       func: drawAngle,
-      args: ['rad', 0.125, 5, 'orange'],
+      args: [sys, a, r, color],
       name: 'drawAngle'
     });
   }

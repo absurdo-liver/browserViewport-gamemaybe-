@@ -515,4 +515,4 @@ let gridCheckInterval = setInterval(() => {
 
 
 
-document.addEventListener('DOMContentLoaded', requestAnimationFrame(renderCanvas));
+requestAnimationFrame(renderCanvas);

@@ -1,5 +1,7 @@
+console.log('script.js loading');
 const canvas = document.getElementById('cartesianCanvas');
 const ctx = canvas.getContext('2d');
+
 
 const ctrlStatus = document.getElementById('ctrlStatus');
 const altStatus = document.getElementById('altStatus');
@@ -25,6 +27,7 @@ const paramInput = document.getElementById('paramInput');
 const sysInput = document.getElementById('sysInput');
 const figureInput = document.getElementById('figureInput');
 const pointArrayInput = document.getElementById('pointArrayInput');
+const drawButton = document.getElementById('drawButton');
 
 var gridSize = window.innerWidth / 20;
 var pointDensity = 0.1;
@@ -35,22 +38,31 @@ var currentHeight = window.innerHeight;
 var currentOrigin = [currentWidth / 2, currentHeight / 2];
 
 var funToCall = [];
+var n = 0;
+var lastClick = -1;
 
 window.addEventListener('keydown', keyEventDown);
 window.addEventListener('keyup', keyEventUp);
 selectionBox.addEventListener('change', selection);
-window.addEventListener('mousemove', () => {
-  let output = '';
+drawButton.addEventListener('click', callRendering);
+aInput.addEventListener('keydown', checkInputsBeforeCall);
+bInput.addEventListener('keydown', checkInputsBeforeCall);
+cInput.addEventListener('keydown', checkInputsBeforeCall);
+hInput.addEventListener('keydown', checkInputsBeforeCall);
+kInput.addEventListener('keydown', checkInputsBeforeCall);
+pInput.addEventListener('keydown', checkInputsBeforeCall);
+rInput.addEventListener('keydown', checkInputsBeforeCall);
+limitsMinInput.addEventListener('keydown', checkInputsBeforeCall);
+limitsMaxInput.addEventListener('keydown', checkInputsBeforeCall);
+colorInput.addEventListener('keydown', checkInputsBeforeCall);
+trigRatioInput.addEventListener('keydown', checkInputsBeforeCall);
+paramInput.addEventListener('keydown', checkInputsBeforeCall);
+sysInput.addEventListener('keydown', checkInputsBeforeCall);
+figureInput.addEventListener('keydown', checkInputsBeforeCall);
+pointArrayInput.addEventListener('keydown', checkInputsBeforeCall);
 
-  for(let i = 0; i < funToCall.length; i++){
-    output += `${funToCall[i].name} | ${funToCall[i].args.join(', ')}\n`;
-  }
-
-  document.getElementById('functionsToCall').textContent = output;
-});
-
-// Helper function (defined once outside of selection())
 function hideAllInputs() {
+    console.log('hiding inputs');
     aInput.classList.add('hidden');
     bInput.classList.add('hidden');
     cInput.classList.add('hidden');
@@ -66,122 +78,151 @@ function hideAllInputs() {
     colorInput.classList.add('hidden');
     limitsMinInput.classList.add('hidden');
     limitsMaxInput.classList.add('hidden');
+    console.log('success hideAllInputs');
 }
 
 function selection(){
+    console.log('starting selection function');
   let opt = selectionBox.value;
 
-  // Clear previous inputs from view
   hideAllInputs();
 
-  // Display inputs relevant to the new selection
   if(opt === 'drawLinearStandard'){
+    console.log('chosing linear');
     aInput.classList.remove('hidden')
     bInput.classList.remove('hidden')
     cInput.classList.remove('hidden')
     colorInput.classList.remove('hidden')
     limitsMinInput.classList.remove('hidden')
     limitsMaxInput.classList.remove('hidden')
-    
+    console.log('chose success');
   } else if(opt === 'drawPolynomialVertex'){
-    // ... all remove('hidden') calls for this option ... 
+    console.log('chosing polynomial');
     aInput.classList.remove('hidden')
     hInput.classList.remove('hidden')
     kInput.classList.remove('hidden')
     pInput.classList.remove('hidden')
     colorInput.classList.remove('hidden')
     limitsMinInput.classList.remove('hidden')
-    limitsMaxInput.classList.remove('hidden')    
-  } 
-  // ... continue with all other 'else if' blocks in selection() to display inputs ...
-  
-  // Now that the *correct* inputs are visible, call the rendering logic:
-  callRendering(opt);
+    limitsMaxInput.classList.remove('hidden')
+    console.log('chose success');
+  } else if(opt === 'drawExp'){
+    console.log('chosing exponential');
+    aInput.classList.remove('hidden')
+    bInput.classList.remove('hidden')
+    colorInput.classList.remove('hidden')
+    limitsMinInput.classList.remove('hidden')
+    limitsMaxInput.classList.remove('hidden')
+    console.log('chose success');
+  }  else if(opt === 'drawTrigRatio'){
+    console.log('chosing trig');
+    aInput.classList.remove('hidden')
+    hInput.classList.remove('hidden')
+    kInput.classList.remove('hidden')
+    paramInput.classList.remove('hidden')
+    trigRatioInput.classList.remove('hidden')
+    colorInput.classList.remove('hidden')
+    limitsMinInput.classList.remove('hidden')
+    limitsMaxInput.classList.remove('hidden')
+    console.log('chose success');
+  } else if(opt === 'drawAngle'){
+    console.log('chosing angle');
+    aInput.classList.remove('hidden')
+    rInput.classList.remove('hidden')
+    colorInput.classList.remove('hidden')
+    sysInput.classList.remove('hidden')
+    console.log('chose success');
+  }     /* else if(opt === 'drawGeometry'){
+    console.log('chosing geometry');
+    figureInput.classList.remove('hidden')
+    pointArrayInput.classList.remove('hidden')
+    colorInput.classList.remove('hidden')
+    console.log('chose success');
+  }                                             */
+  console.log('success selection');
 }
 
-
-function callRendering(opt){
-
-  if(opt === 'clear'){
-    funToCall.length = 0;
-  } else if(opt === 'drawLinearStandard'){
-    let a = aInput.value;
-    let b = bInput.value;
-    let c = cInput.value;
+function callRendering(){
+    console.log('starting callRandering');
+    let opt = selectionBox.value;
+    let a = parseFloat(aInput.value);
+    let b = parseFloat(bInput.value);
+    let c = parseFloat(cInput.value);
+    let h = parseFloat(hInput.value);
+    let k = parseFloat(kInput.value);
+    let p = parseFloat(pInput.value);
+    let r = parseFloat(rInput.value);
+    let sys = sysInput.value
+    let param = paramInput.value;
     let color = colorInput.value;
-    let limits = [limitsMinInput.value, limitsMaxInput.value];
+    let limits = [parseFloat(limitsMinInput.value), parseFloat(limitsMaxInput.value)];
+    let trigRatio = trigRatioInput.value;
+    
+  if(opt === 'clear'){
+    console.log('chosing clear');
+    funToCall.length = 0;
+    console.log('chose success');
+  } else if(opt === 'drawLinearStandard'){
+    console.log('chosing linear');
     funToCall.push({
       func: drawLinearStandard,
       args: [a, b, c, color, limits],
-      name: 'drawLinearStandard'
+      name: 'drawLinearStandard',
+      count: n+1
     });
-    // Removed all classList.add calls here
-    
+    console.log('chose success');
   } else if(opt === 'drawPolynomialVertex'){
-    let a = aInput.value;
-    let h = hInput.value;
-    let k = kInput.value;
-    let p = pInput.value;
-    let color = colorInput.value;
-    let limits = [limitsMinInput.value, limitsMaxInput.value];
+    console.log('chosing polynomial');
     funToCall.push({
       func: drawPolynomialVertex,
       args: [a, h, k, p, color, limits],
-      name: 'drawPolynomialVertex'
+      name: 'drawPolynomialVertex',
+      count: n+1
     });
-    // Removed all classList.add calls here
-
+    console.log('chose success');
   } else if(opt === 'drawExp'){
-    let a = aInput.value;
-    let b = bInput.value;
-    let color = colorInput.value;
-    let limits = [limitsMinInput.value, limitsMaxInput.value];
+    console.log('chosing exponetial');
     funToCall.push({
       func: drawExp,
       args: [a, b, color, limits],
-      name: 'drawExp'
+      name: 'drawExp',
+      count: n+1
     });
-    // Removed all classList.add calls here
-
+    console.log('chose success');
   } else if(opt === 'drawTrigRatio'){
-    let a = aInput.value;
-    let h = hInput.value;
-    let k = kInput.value;
-    let param = paramInput.value;
-    let trigRatio = trigRatioInput.value;
-    let color = colorInput.value;
-    let limits = [limitsMinInput.value, limitsMaxInput.value];
+    console.log('chose trig ratio');
     funToCall.push({
       func: drawTrigRatio,
       args: [trigRatio, param, a, h, k, color, limits],
-      name: 'drawTrigRatio'
+      name: 'drawTrigRatio',
+      count: n+1
     });
-    // Removed all classList.add calls here
-    
+    console.log('chose success');
   } else if(opt === 'drawAngle'){
-    let a = aInput.value;
-    let r = rInput.value;
-    let color = colorInput.value;
-    let sys = sysInput.value;
+    console.log('chosing angle');
     funToCall.push({
       func: drawAngle,
       args: [sys, a, r, color],
-      name: 'drawAngle'
+      name: 'drawAngle',
+      count: n+1
     });
-    // Removed all classList.add calls here
-    
-  } else if(opt === 'drawGeometry'){
+    console.log('chose success');
+  } /*  else if(opt === 'drawGeometry'){
+    console.log('chosing geometry');
     let figure = figureInput.value;
     let pointArray = pointArrayParse(pointArrayInput.value);
     let color = colorInput.value;
     funToCall.push({
-      // FIXING the original bug mentioned in the previous response:
       func: drawGeometry, 
       args: [figure, pointArray, color],
-      name: 'drawGeometry' 
+      name: 'drawGeometry',
+      count: n
     });
-    // Removed all classList.add calls here
-  }
+    console.log('chose success');
+  }                                                             */
+    n += 1;
+    updateButtons();
+ console.log('success callRendering');
 }
 
 function pointArrayParse(textToParse){
@@ -191,6 +232,7 @@ function pointArrayParse(textToParse){
   textToParse = textToParse.replaceAll('),(', '|');
   textToParse = textToParse.replace(')', '');
   textToParse = textToParse.split('|');
+  console.log('normalized inputs');
   for (let i = 0; i < textToParse.length; i++){
     let text = {
       x: parseInt(textToParse[i].toString().split(',')[0]), 
@@ -215,11 +257,10 @@ function callerFunction() {
 
 
 function drawLinearStandard(a, b, c, color, limits) {
-    if (b === 0) return;
-    if (typeof color != 'string') return;
-    if (!limits) {
-        limits = [-currentWidth / (2 * gridSize), currentWidth / (2 * gridSize)];
-    }
+    
+    if (b === 0)return;
+    if (typeof color != 'string')return
+    if (limits[0] === '' || limits[1] === '') {limits = [-currentWidth / (2 * gridSize), currentWidth / (2 * gridSize)];}
 
     ctx.strokeStyle = color;
     ctx.lineWidth = 2;
@@ -227,6 +268,7 @@ function drawLinearStandard(a, b, c, color, limits) {
 
     let firstPoint = true;
 
+    
     for (let x_cartesian = limits[0]; x_cartesian <= limits[1]; x_cartesian += pointDensity) {
         let y_cartesian = (c - a * x_cartesian) / b;
 
@@ -244,17 +286,16 @@ function drawLinearStandard(a, b, c, color, limits) {
 }
 
 function drawPolynomialVertex(a, h, k, p, color, limits) {
-    if (typeof color != 'string') return;
-    if (!limits) {
-        limits = [-currentWidth / (2 * gridSize), currentWidth / (2 * gridSize)];
-    }
+    
+    if (typeof color != 'string') {console.log('color != string, returning'); return;}
+    if (limits[0] === '' || limits[1] === '') {limits = [-currentWidth / (2 * gridSize), currentWidth / (2 * gridSize)];}
 
     ctx.strokeStyle = color;
     ctx.lineWidth = 2;
     ctx.beginPath();
 
     let firstPoint = true;
-
+    
     for (let x_cartesian = limits[0]; x_cartesian < limits[1] + pointDensity; x_cartesian += pointDensity) {
         let y_cartesian = (a * (x_cartesian - h) ** p + k);
 
@@ -273,10 +314,9 @@ function drawPolynomialVertex(a, h, k, p, color, limits) {
 
 
 function drawExp(a, b, color, limits) {
-    if (typeof color != 'string') return;
-    if (!limits) {
-        limits = [-currentWidth / (2 * gridSize), currentWidth / (2 * gridSize)];
-    }
+    
+    if (typeof color != 'string') {console.log('color != string, returning'); return;}
+    if (limits[0] === '' || limits[1] === '') {limits = [-currentWidth / (2 * gridSize), currentWidth / (2 * gridSize)];}
 
     ctx.strokeStyle = color;
     ctx.lineWidth = 2;
@@ -300,16 +340,13 @@ function drawExp(a, b, color, limits) {
     ctx.stroke();
 }
 
-
 function drawTrigRatio(trigRatio, param, a, h, k, color, limits) {
     let firstPoint = true;
     let ratioResult;
-    if (typeof color != 'string') return;
-    if (typeof param != 'string') return;
-    if (typeof trigRatio != 'string') return;
-    if (!limits) {
-        limits = [-currentWidth / (2 * gridSize), currentWidth / (2 * gridSize)];
-    }
+    if (typeof color != 'string') return
+    if (typeof param != 'string') return
+    if (typeof trigRatio != 'string')  return
+    if (limits[0] === '' || limits[1] === '') {limits = [-currentWidth / (2 * gridSize), currentWidth / (2 * gridSize)];}
 
     ctx.strokeStyle = color;
     ctx.lineWidth = 2;
@@ -378,11 +415,12 @@ function drawTrigRatio(trigRatio, param, a, h, k, color, limits) {
 }
 
 function drawAngle(sys, a, r, color) {
+    
     // sys = radians or degrees
     // a = angle
-    if (typeof sys !== 'string' || typeof color !== 'string') return;
-    if (sys !== 'rad' && sys !== 'deg') return;
-    if (typeof a !== 'number' || typeof r !== 'number' || r <= 0) return;
+    if (typeof sys !== 'string' || typeof color !== 'string') return
+    if (sys !== 'rad' && sys !== 'deg') return
+    if (typeof a !== 'number' || typeof r !== 'number' || r <= 0) return
 
     if (sys === 'deg') {
         a *= Math.PI / 180;
@@ -399,15 +437,16 @@ function drawAngle(sys, a, r, color) {
     ctx.beginPath();
     ctx.arc(currentOrigin[0], currentOrigin[1], r * gridSize, -a, 0);
     ctx.stroke();
+    
 }
 
-function drawGeometry(figure, pointArray, color) {
+//function drawGeometry(figure, pointArray, color) {
     // self explanitory
     // ctx.beginPath();
     // ctx.moveTo(x1, y1);
     // ctx.lineTo(x2, y2);
     // ctx.stroke();
-}
+//}
 
 
 function renderCanvas() {
@@ -477,42 +516,108 @@ function keyEventDown(e) {
     if (e.key === 'Control') {
         ctrlStatus.textContent = 'ctrl status: down';
         ctrlIsPressed = true;
+        console.log('keydown:' + e.key);
     }
     if (e.key === 'Alt') {
         altStatus.textContent = 'alt status: down';
         altIsPressed = true;
+        console.log('keydown:' + e.key);
     }
     if (e.key === 'Shift') {
         shiftStatus.textContent = 'shift status: down';
         shiftIsPressed = true;
+        console.log('keydown:' + e.key);
     }
 }
 
 function keyEventUp(e) {
     if (e.key === 'Control') {
+        console.log('keyup:' + e.key);
         ctrlStatus.textContent = 'ctrl status: up';
         ctrlIsPressed = false;
     }
     if (e.key === 'Alt') {
+        console.log('keyup:' + e.key);
         altStatus.textContent = 'alt status: up';
         altIsPressed = false;
     }
     if (e.key === 'Shift') {
+        console.log('keyup:' + e.key);
         shiftStatus.textContent = 'shift status: up';
         shiftIsPressed = false;
     }
 }
 
+function checkInputsBeforeCall(e){
+    if(e.key === 'Enter'){
+        callRendering();
+    }
+}
 
+function updateButtons(){
+    document.getElementById('functionsToCall').innerHTML += `
+    <button 
+    id='drawnButton${funToCall[n-1].count}' 
+    onClick='buttonsClickHandler(${funToCall[n-1].count})'
+    >
+    [#${funToCall[n-1].count}] ${funToCall[n-1].name} | ${funToCall[n-1].args.join(', ')}
+    </button>`;
+}
+
+function buttonsClickHandler(i){
+if(lastClick === 0){
+    if(funToCall[i-1]){
+       n -= 1;
+        for(let a = 0; a < funToCall.length; a++){
+           if(funToCall[a].count === i){
+                funToCall.splice(a, 1);
+                break
+           }
+        }
+        document.getElementById('functionsToCall').innerHTML = '';
+        for(let b = 0; b < n; b++){
+            funToCall[b].count = b+1;
+            document.getElementById('functionsToCall').innerHTML += `
+    <button 
+    id='drawnButton${funToCall[b].count}' 
+    onClick='buttonsClickHandler(${funToCall[b].count})'
+    >
+    [#${funToCall[b].count}] ${funToCall[b].name} | ${funToCall[b].args.join(', ')}
+    </button>`;
+        }
+        
+    } 
+}    
+}
+
+window.addEventListener('mousedown', function(event) {
+    if (event.button === 0) {
+        lastClick = 0;
+    } else if (event.button === 2) {
+        lastClick = 2;
+  }
+});
+
+window.addEventListener('mouseup', function(event) {
+    setTimeout(() => {
+        lastClick = -1;
+    },250)
+});
+
+window.addEventListener('contextmenu', function(event) {
+        event.preventDefault();
+        console.log("prevented context menu !");
+});
 
 let gridCheckInterval = setInterval(() => {
     gridSize = window.innerWidth / 20;
     currentWidth = window.innerWidth;
     currentHeight = window.innerHeight;
     currentOrigin = [currentWidth / 2, currentHeight / 2];
-
 }, 100);
 
 
 
+
 requestAnimationFrame(renderCanvas);
+console.log('script.js loaded');

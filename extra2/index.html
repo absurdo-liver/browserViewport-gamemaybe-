@@ -4,6 +4,7 @@
 <head>
     <title>huh</title>
     <script src="script.js" defer></script>
+    <!-- <script src="test.js" defer></script> -->
     <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -12,7 +13,7 @@
         <p id='shiftStatus'>shift status: up</p>
         <p id='ctrlStatus'>ctrl status: up</p>
         <p id='altStatus'>alt status: up</p>
-        <p id='functionsToCall'>-</p>
+        <p id='functionsToCall'></p>
     </div>
     <div class="controls">
       <select id='selectionBox'>
@@ -22,7 +23,7 @@
         <option value='drawExp'>Exponential (standard form)</option>
         <option value='drawTrigRatio'>Trig function (vertex form)</option>
         <option value='drawAngle'>Angle (deg/rad)</option>
-        <option value='drawGeometry'>Geometry (figure)</option>
+        <!-- <option value='drawGeometry'>Geometry (figure)</option> -->
         <option value='clear'>clear</option>
       </select>
       <button id='drawButton'>draw</button>
@@ -44,7 +45,8 @@
       <input type='text' placeholder='figure' id='figureInput' class='hidden'>
       <input type='text' placeholder='pointArray ((x, y),(a, b))' id='pointArrayInput' class='hidden'>
       </div>
-    <canvas id="cartesianCanvas" width="400" height="400"></canvas>
+    <canvas id="cartesianGrid"></canvas>
+    <canvas id="cartesianCanvas"></canvas>
 </body>
 
 </html>

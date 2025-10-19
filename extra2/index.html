@@ -2,51 +2,52 @@
 <html>
 
 <head>
-    <title>huh</title>
-    <script src="script.js" defer></script>
-    <!-- <script src="test.js" defer></script> -->
-    <link rel="stylesheet" href="styles.css">
+	<title>huh</title>
+	<script src="script.js" defer></script>
+	<!-- <script src="test.js" defer></script> -->
+	<link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <div class="Status">
-        <p id='shiftStatus'>shift status: up</p>
-        <p id='ctrlStatus'>ctrl status: up</p>
-        <p id='altStatus'>alt status: up</p>
-        <p id='functionsToCall'></p>
-    </div>
-    <div class="controls">
-      <select id='selectionBox'>
-        <option value='0'>draw:</option>
-        <option value='drawLinearStandard'>Linear (Standard form)</option>
-        <option value='drawPolynomialVertex'>Polynomial (Vertex form)</option>
-        <option value='drawExp'>Exponential (standard form)</option>
-        <option value='drawTrigRatio'>Trig function (vertex form)</option>
-        <option value='drawAngle'>Angle (deg/rad)</option>
-        <!-- <option value='drawGeometry'>Geometry (figure)</option> -->
-        <option value='clear'>clear</option>
-      </select>
-      <button id='drawButton'>draw</button>
-    </div>
-    <div class="inputs">
-      <input type='number' placeholder='a' id='aInput' class='hidden'>
-      <input type='number' placeholder='b' id='bInput' class='hidden'>
-      <input type='number' placeholder='c' id='cInput' class='hidden'>
-      <input type='number' placeholder='h' id='hInput' class='hidden'>
-      <input type='number' placeholder='k' id='kInput' class='hidden'>
-      <input type='number' placeholder='power' id='pInput' class='hidden'>
-      <input type='number' placeholder='radius' id='rInput' class='hidden'>
-      <input type='number' placeholder='limit Min' id='limitsMinInput' class='hidden'>
-      <input type='number' placeholder='limit Max' id='limitsMaxInput' class='hidden'>
-      <input type='text' placeholder='color (text)' id='colorInput' class='hidden'>
-      <input type='text' placeholder='trigRatio (text)' id='trigRatioInput' class='hidden'>
-      <input type='text' placeholder='param (x/y)' id='paramInput' class='hidden'>
-      <input type='text' placeholder='sys (rad/deg)' id='sysInput' class='hidden'>
-      <input type='text' placeholder='figure' id='figureInput' class='hidden'>
-      <input type='text' placeholder='pointArray ((x, y),(a, b))' id='pointArrayInput' class='hidden'>
-      </div>
-    <canvas id="cartesianGrid"></canvas>
-    <canvas id="cartesianCanvas"></canvas>
+	<div class="Status">
+		<p id='shiftStatus'>shift status: up</p>
+		<p id='ctrlStatus'>ctrl status: up</p>
+		<p id='altStatus'>alt status: up</p>
+		<p id='functionsToCall'></p>
+    <p id='hiddenBehind'></p>
+	</div>
+	<div class="controls">
+		<select id='selectionBox'>
+			<option value='0'>draw:</option>
+			<option value='drawLinearStandard'>Linear (Standard form)</option>
+			<option value='drawPolynomialVertex'>Polynomial (Vertex form)</option>
+			<option value='drawExp'>Exponential (standard form)</option>
+			<option value='drawTrigRatio'>Trig function (vertex form)</option>
+			<option value='drawAngle'>Angle (deg/rad)</option>
+			<!-- <option value='drawGeometry'>Geometry (figure)</option> -->
+			<option value='clear'>clear</option>
+		</select>
+		<button id='drawButton'>draw</button>
+	</div>
+	<div class="inputs">
+		<input type='number' placeholder='a' id='aInput' class='hidden'>
+		<input type='number' placeholder='b' id='bInput' class='hidden'>
+		<input type='number' placeholder='c' id='cInput' class='hidden'>
+		<input type='number' placeholder='h' id='hInput' class='hidden'>
+		<input type='number' placeholder='k' id='kInput' class='hidden'>
+		<input type='number' placeholder='power' id='pInput' class='hidden'>
+		<input type='number' placeholder='radius' id='rInput' class='hidden'>
+		<input type='number' placeholder='limit Min' id='limitsMinInput' class='hidden'>
+		<input type='number' placeholder='limit Max' id='limitsMaxInput' class='hidden'>
+		<input type='text' placeholder='color (text)' id='colorInput' class='hidden'>
+		<input type='text' placeholder='trigRatio (text)' id='trigRatioInput' class='hidden'>
+		<input type='text' placeholder='param (x/y)' id='paramInput' class='hidden'>
+		<input type='text' placeholder='sys (rad/deg)' id='sysInput' class='hidden'>
+		<input type='text' placeholder='figure' id='figureInput' class='hidden'>
+		<input type='text' placeholder='pointArray ((x, y),(a, b))' id='pointArrayInput' class='hidden'>
+	</div>
+	<canvas id="cartesianGrid"></canvas>
+	<canvas id="cartesianCanvas"></canvas>
 </body>
 
 </html>

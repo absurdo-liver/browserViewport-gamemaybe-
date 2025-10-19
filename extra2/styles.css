@@ -1,42 +1,73 @@
 body {
-    margin: 0;
+	margin: 0;
 }
 
 canvas {
-    position: absolute;
-    margin: 0;
-    z-index: 0;
+	position: absolute;
+	margin: 0;
+	z-index: 0;
 }
 
 .Status {
-    position: absolute;
-    margin: 0;
-    z-index: 1;
+	position: absolute;
+	margin: 0;
+	z-index: 1;
 }
 
 .controls {
-    display: table-row;
-    position: absolute;
-    margin: 0;
-    bottom: 0;
-    z-index: 2;
+	display: table-row;
+	position: absolute;
+	margin: 0;
+	bottom: 0;
+	z-index: 2;
 }
 
 #functionsToCall {
-  display: flex;
-  flex-direction: column;
-}
-
-.inputs{
-  display: grid;
-  text-align: right;
   position: absolute;
-  margin: 0;
-  right: 0;
+  top: 150%;
+	display: flex;
+	flex-direction: column;
   z-index: 2;
 }
 
+#hiddenBehind {
+  position: absolute;
+  top: 137%;
+  left: 50%;
+  display: flex;
+	flex-direction: column;
+  z-index: 1;
+}
+
+.inputs {
+	display: grid;
+	text-align: right;
+	position: absolute;
+	margin: 0;
+	right: 0;
+	z-index: 2;
+}
+
+.drawnButtonsClass {
+  opacity: 100;
+  --buttonsW: max-content;
+  width: max-content;
+  border-radius: 5px;
+  transition: ease-in-out 0.25s;
+}
+
+
+.drawnButtonsClass:hover {
+  opacity: 25%;
+}
+
+.hiddenTextBehind {
+  text-align: center;
+  width: max-content;
+  background-color: black;
+  color: white;
+}
 
 .hidden {
-  display: none;
+	display: none;
 }

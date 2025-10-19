@@ -294,6 +294,16 @@ function cursorDisplay(x, y, a, b) {
   console.log('ran cursorDisplay(), updated & appended coords');
 }
 
+function redirect(n){
+	if(n === 1){
+		window.location = 'https://absurdo-liver.github.io/browserViewport-gamemaybe-/extra';
+	} else if(n === 2){
+		window.location = 'https://absurdo-liver.github.io/browserViewport-gamemaybe-/extra';
+	} else {
+		if(typeof n === 'string') window.location = n;
+	}
+}
+
 // initialization, handles initialization
 function init() {
 	globalcenterX = resizeHandler()[0];

@@ -77,7 +77,7 @@ colorInput.addEventListener('keydown', checkInputsBeforeCall);
 trigRatioInput.addEventListener('keydown', checkInputsBeforeCall);
 paramInput.addEventListener('keydown', checkInputsBeforeCall);
 sysInput.addEventListener('keydown', checkInputsBeforeCall);
-figureInput.addEventListener('keydown', checkInputsBeforeCall);
+figureInput.addEventListener('keydown', checkCustomBeforeCall);
 pointArrayInput.addEventListener('keydown', checkInputsBeforeCall);
 
 function checkInputsBeforeCall(e) {
@@ -158,6 +158,7 @@ function selection() {
 	} else if(opt === 'drawGeometry'){
     console.log('chosing geometry');
     pointArrayInput.classList.remove('hidden')
+    figureInput.classList.remove('hidden')
     colorInput.classList.remove('hidden')
     console.log('chose success');
   }                                             
@@ -261,28 +262,6 @@ function callRendering() {
 	console.log('success callRendering');
 }
 
-function pointArrayParse(textToParse) {
-  const output = [];
-  const normalizedText = textToParse.replaceAll(' ', '')
-                                 .replace('(', '')
-                                 .replaceAll('),(', '|')
-                                 .replace(')', '');
-  const pairs = normalizedText.split('|');
-  
-  for (const pair of pairs) {
-    const coords = pair.split(',');
-    if (coords.length === 2) {
-      const x = parseInt(coords[0]);
-      const y = parseInt(coords[1]);
-      if (!isNaN(x) && !isNaN(y)) {
-        output.push({ x, y });
-      }
-    }
-  }
-  return output;
-}
-
-
 function callerFunction() {
 	for (let i = 0; i < funToCall.length; i++) {
 		let {
@@ -292,7 +271,6 @@ function callerFunction() {
 		func(...args);
 	}
 }
-
 
 function drawLinearYIntercept(a, b, color, limits) {
 
@@ -343,6 +321,37 @@ function drawPolynomialVertex(a, h, k, p, color, limits) {
 
 	for (let x_cartesian = limits[0]; x_cartesian < limits[1] + pointDensity; x_cartesian += pointDensity) {
 		let y_cartesian = (a * (x_cartesian - h) ** p + k);
+
+		let x_canvas = x_cartesian * gridSize + currentOrigin[0];
+		let y_canvas = currentOrigin[1] - y_cartesian * gridSize;
+
+		if (firstPoint) {
+			ctx.moveTo(x_canvas, y_canvas);
+			firstPoint = false;
+		} else {
+			ctx.lineTo(x_canvas, y_canvas);
+		}
+	}
+	ctx.stroke();
+}
+
+function drawPolynomialStandard(a, b, c, p, color) {
+
+	if (typeof color != 'string') {
+		console.log('color != string, returning');
+		return;
+	}
+
+	let limits = [-10,10];
+
+	ctx.strokeStyle = color;
+	ctx.lineWidth = 2;
+	ctx.beginPath();
+
+	let firstPoint = true;
+
+	for (let x_cartesian = limits[0]; x_cartesian < limits[1] + pointDensity; x_cartesian += pointDensity) {
+		let y_cartesian = (a * (x_cartesian ** p ) + (b * x_cartesian) + c);
 
 		let x_canvas = x_cartesian * gridSize + currentOrigin[0];
 		let y_canvas = currentOrigin[1] - y_cartesian * gridSize;
@@ -506,6 +515,145 @@ function drawGeometry(pointArray, color) {
   }
   ctx.closePath();
   ctx.stroke();
+}
+
+function pointArrayParse(textToParse) {
+  const output = [];
+  const normalizedText = textToParse.replaceAll(' ', '')
+                                 .replace('(', '')
+                                 .replaceAll('),(', '|')
+                                 .replace(')', '');
+  const pairs = normalizedText.split('|');
+  
+  for (const pair of pairs) {
+    const coords = pair.split(',');
+    if (coords.length === 2) {
+      const x = parseInt(coords[0]);
+      const y = parseInt(coords[1]);
+      if (!isNaN(x) && !isNaN(y)) {
+        output.push({ x, y });
+      }
+    }
+  }
+  return output;
+}
+
+function parsePartitionYInt(parts) {
+    parts = parts.split(' ');
+    let output = {};
+    let independentVariable = parts[2].includes('x') ? 'x' : parts[2].includes('y') ? 'y' : 'x';
+    if (parts[2].length === 1 && parts[2] === independentVariable) {
+        output.a = 1;
+    } else {
+        parts[2] = parts[2].replace(independentVariable, '');
+        if (parts[2].includes('.')) output.a = parseFloat(parts[2]);
+        if (!parts[2].includes('.')) output.a = parseInt(parts[2]);
+    }
+    if (parts[4].includes('.')) output.b = parseFloat(parts[4]);
+    if (!parts[4].includes('.')) output.b = parseInt(parts[4]);
+    if (parts[3] === '-') {
+        output.b *= -1;
+    } else if (parts[3] != '+') {
+        output = 'invalid parameter before "b" variable';
+        return;
+    }
+    output.indep = independentVariable;
+    return output;
+}
+
+
+function parsePartitionPolynomial(parts) {
+    parts = parts.split(' ');
+    let output = {};
+    let independentVariable = parts[2].includes('x') ? 'x' : parts[2].includes('y') ? 'y' : 'x';
+    if (!parts[4].includes(independentVariable) || !parts[2].includes(independentVariable)) return 'invalid independent variable'
+
+    if (parts[2].length === 1 && parts[2] === independentVariable) {
+        output.a = 1;
+    } else {
+        parts[2] = parts[2].replace(independentVariable, '');
+        if (parts[2].includes('.')) output.a = parseFloat(parts[2]);
+        if (!parts[2].includes('.')) output.a = parseInt(parts[2]);
+    }
+
+    if (parts[4].length === 1 && parts[4] === independentVariable) {
+        output.b = 1;
+    } else {
+        parts[4] = parts[4].replace(independentVariable, '');
+        if (parts[4].includes('.')) output.b = parseFloat(parts[4]);
+        if (!parts[4].includes('.')) output.b = parseInt(parts[4]);
+    }
+
+    if (parts[6].includes('.')) output.c = parseFloat(parts[6]);
+    if (!parts[6].includes('.')) output.c = parseInt(parts[6]);
+
+    if (parts[2].split('^')[1].includes('.')) {
+        output.power = parseFloat(parts[2].split('^')[1]);
+    } else {
+        output.power = parseInt(parts[2].split('^')[1])
+    }
+
+    if (parts[3] === '-') {
+        output.b *= -1;
+    } else if (parts[3] != '+') {
+        output = 'invalid parameter before "b" variable';
+        return;
+    }
+
+    if (parts[5] === '-') {
+        output.c *= -1;
+    } else if (parts[5] != '+') {
+        output = 'invalid parameter before "b" variable';
+        return;
+    }
+
+    output.indep = independentVariable;
+
+    return output;
+}
+
+function parseFunctionType(input) {
+    if (typeof input != 'string') return 'must input string'
+    output = input.split(' ');
+    if (output[0] != 'y' && output[0] != 'x') return 'invalid expression'
+    if (output[1] != '=') return 'must include "=" @ second place';
+
+
+    const regexY1 = /^y = (-?\d+)x \+ (-?\d+)$/;
+    const regexY2 = /^y = (-?\d+)x\^(-?\d+) \+ (-?\d+)x \+ (-?\d+)$/;
+    const regexX1 = /^x = (-?\d+)y \+ (-?\d+)$/;
+    const regexX2 = /^x = (-?\d+)y\^(-?\d+) \+ (-?\d+)y \+ (-?\d+)$/;
+
+    if (regexY1.test(input) || regexX1.test(input)) {
+        return parsePartitionYInt(input);
+    } else if (regexY2.test(input) || regexX2.test(input)) {
+        return parsePartitionPolynomial(input);
+    } else {
+        return 'invalid expression'
+    }
+}
+
+function checkCustomBeforeCall(e){
+  if(e.key !='Enter') return
+
+  let customParsed = parseFunctionType(figureInput.value);
+  
+  if(typeof customParsed === 'string'){
+    figureInput.placeholder = customParsed;
+  } else {
+    if(customParsed.c){
+      funToCall.push({
+			func: drawPolynomialStandard,
+			args: [customParsed.a, customParsed.b, customParsed.c, customParsed.power, 'black'],
+			name: 'drawPolynomialStandard',
+			count: n + 1
+		});
+    n += 1;
+    }
+
+    funToCall.push()
+  }
+  
 }
 
 

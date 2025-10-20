@@ -29,6 +29,10 @@ var mouseMove = true;
 window.addEventListener('mousemove', mouseMoveHandler);
 window.addEventListener('keydown', hotkeyHandler);
 canvas.addEventListener('click', clickHandler);
+window.addEventListener('contextmenu', function(event) {
+	event.preventDefault();
+	console.log("prevented context menu !");
+});
 
 // mouse movement handler, handle mouse movement
 function mouseMoveHandler(e) {

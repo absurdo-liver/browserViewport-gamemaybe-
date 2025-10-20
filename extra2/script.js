@@ -181,8 +181,10 @@ function callRendering() {
 	let sys = sysInput.value
 	let param = paramInput.value;
 	let color = colorInput.value;
-	let limits = [parseFloat(limitsMinInput.value), parseFloat(limitsMaxInput.value)];
 	let trigRatio = trigRatioInput.value;
+	let limitsMin = parseFloat(limitsMinInput.value) || -10;
+  let limitsMax = parseFloat(limitsMaxInput.value) || 10;
+  let limits = [limitsMin, limitsMax];
 
 	if (opt === 'clear') {
 		console.log('chosing clear');
@@ -601,14 +603,6 @@ function updateButtons() {
     [#${funToCall[n-1].count}] ${funToCall[n-1].name} | ${funToCall[n-1].args.join(', ')}
     </button>
     `;
-    document.getElementById('hiddenBehind').innerHTML += `
-    <p 
-    id='drawnButton${funToCall[n-1].count}hiddenText' 
-    class='hiddenTextBehind'
-    >
-     click to delete 
-    </p>
-    `;
 }
 
 function buttonsClickHandler(i) {
@@ -633,14 +627,6 @@ function buttonsClickHandler(i) {
     >
     [#${funToCall[b].count}] ${funToCall[b].name} | ${funToCall[b].args.join(', ')}
     </button>
-    `;
-    document.getElementById('hiddenBehind').innerHTML += `
-    <p 
-    id='drawnButton${funToCall[b].count}hiddenText' 
-    class='hiddenTextBehind'
-    >
-     click to delete 
-    </p>
     `;
 			}
 
@@ -668,14 +654,6 @@ function updateButtonsOnLoad() {
     >
     [#${funToCall[i].count}] ${funToCall[i].name} | ${funToCall[i].args.join(', ')}
     </button>
-    `;
-    document.getElementById('hiddenBehind').innerHTML += `
-    <p 
-    id='drawnButton${funToCall[i].count}hiddenText' 
-    class='hiddenTextBehind'
-    >
-     click to delete 
-    </p>
     `;
 	}
 }

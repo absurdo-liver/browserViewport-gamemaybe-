@@ -109,14 +109,12 @@ function hideAllInputs() {
 function selection() {
 	console.log('starting selection function');
 	let opt = selectionBox.value;
-
 	hideAllInputs();
 
-	if (opt === 'drawLinearStandard') {
+	if (opt === 'drawLinearYIntercept') {
 		console.log('chosing linear');
 		aInput.classList.remove('hidden')
 		bInput.classList.remove('hidden')
-		cInput.classList.remove('hidden')
 		colorInput.classList.remove('hidden')
 		limitsMinInput.classList.remove('hidden')
 		limitsMaxInput.classList.remove('hidden')
@@ -157,14 +155,12 @@ function selection() {
 		colorInput.classList.remove('hidden')
 		sysInput.classList.remove('hidden')
 		console.log('chose success');
-	}
-	/* else if(opt === 'drawGeometry'){
+	} else if(opt === 'drawGeometry'){
     console.log('chosing geometry');
-    figureInput.classList.remove('hidden')
     pointArrayInput.classList.remove('hidden')
     colorInput.classList.remove('hidden')
     console.log('chose success');
-  }                                             */
+  }                                             
 	console.log('success selection');
 }
 
@@ -185,21 +181,25 @@ function callRendering() {
 	let limitsMin = parseFloat(limitsMinInput.value) || -10;
   let limitsMax = parseFloat(limitsMaxInput.value) || 10;
   let limits = [limitsMin, limitsMax];
+  let pointArray = pointArrayParse(pointArrayInput.value);
 
+  if(opt === '0') return
 	if (opt === 'clear') {
 		console.log('chosing clear');
 		funToCall.length = 0;
 		n = 0;
-		//localStorage.setItem('drawnFunctions', JSON.stringify(funToCall));
-		//localStorage.setItem('');
     updateNText();
+    document.getElementById('functionsToCall').innerHTML = '';
+		localStorage.setItem('drawnFunctions', JSON.stringify(funToCall));
 		console.log('chose success');
-	} else if (opt === 'drawLinearStandard') {
+    console.log('success callRendering');
+    return
+	} else if (opt === 'drawLinearYIntercept') {
 		console.log('chosing linear');
 		funToCall.push({
-			func: drawLinearStandard,
-			args: [a, b, c, color, limits],
-			name: 'drawLinearStandard',
+			func: drawLinearYIntercept,
+			args: [a, b, color, limits],
+			name: 'drawLinearYIntercept',
 			count: n + 1
 		});
     updateNText();
@@ -244,21 +244,17 @@ function callRendering() {
 		});
     updateNText();
 		console.log('chose success');
-	}
-	/*  else if(opt === 'drawGeometry'){
+	} else if(opt === 'drawGeometry'){
 	   console.log('chosing geometry');
-	   let figure = figureInput.value;
-	   let pointArray = pointArrayParse(pointArrayInput.value);
-	   let color = colorInput.value;
 	   funToCall.push({
 	     func: drawGeometry, 
-	     args: [figure, pointArray, color],
+	     args: [pointArray, color],
 	     name: 'drawGeometry',
 	     count: n + 1
 	   });
      updateNText();
 	   console.log('chose success');
-	 }                                                             */
+	 }
 	n += 1;
   updateNText();
 	updateButtons();
@@ -266,21 +262,24 @@ function callRendering() {
 }
 
 function pointArrayParse(textToParse) {
-	let output = [];
-	textToParse = textToParse.replaceAll(' ', '');
-	textToParse = textToParse.replace('(', '');
-	textToParse = textToParse.replaceAll('),(', '|');
-	textToParse = textToParse.replace(')', '');
-	textToParse = textToParse.split('|');
-	console.log('normalized inputs');
-	for (let i = 0; i < textToParse.length; i++) {
-		let text = {
-			x: parseInt(textToParse[i].toString().split(',')[0]),
-			y: parseInt(textToParse[i].toString().split(',')[1])
-		};
-		output.push(text);
-	}
-	return output
+  const output = [];
+  const normalizedText = textToParse.replaceAll(' ', '')
+                                 .replace('(', '')
+                                 .replaceAll('),(', '|')
+                                 .replace(')', '');
+  const pairs = normalizedText.split('|');
+  
+  for (const pair of pairs) {
+    const coords = pair.split(',');
+    if (coords.length === 2) {
+      const x = parseInt(coords[0]);
+      const y = parseInt(coords[1]);
+      if (!isNaN(x) && !isNaN(y)) {
+        output.push({ x, y });
+      }
+    }
+  }
+  return output;
 }
 
 
@@ -290,15 +289,14 @@ function callerFunction() {
 			func,
 			args
 		} = funToCall[i];
-		// Use spread syntax (...) to pass array of arguments to function
 		func(...args);
 	}
 }
 
 
-function drawLinearStandard(a, b, c, color, limits) {
+function drawLinearYIntercept(a, b, color, limits) {
 
-	if (b === 0) return;
+	if (a === 0) return;
 	if (typeof color != 'string') return
 	if (limits[0] === '' || limits[1] === '') {
 		limits = [-currentWidth / (2 * gridSize), currentWidth / (2 * gridSize)];
@@ -312,7 +310,7 @@ function drawLinearStandard(a, b, c, color, limits) {
 
 
 	for (let x_cartesian = limits[0]; x_cartesian <= limits[1]; x_cartesian += pointDensity) {
-		let y_cartesian = (c - a * x_cartesian) / b;
+		let y_cartesian = (a * x_cartesian) + b;
 
 		let x_canvas = x_cartesian * gridSize + currentOrigin[0];
 		let y_canvas = currentOrigin[1] - y_cartesian * gridSize;
@@ -494,13 +492,21 @@ function drawAngle(sys, a, r, color) {
 
 }
 
-//function drawGeometry(figure, pointArray, color) {
-// self explanitory
-// ctx.beginPath();
-// ctx.moveTo(x1, y1);
-// ctx.lineTo(x2, y2);
-// ctx.stroke();
-//}
+function drawGeometry(pointArray, color) {
+  if (pointArray.length < 2) {
+    return;
+  }
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  //try (0,0),(2,5),(4,0)
+  ctx.moveTo(pointArray[0].x * gridSize + currentOrigin[0], -pointArray[0].y * gridSize + currentOrigin[1]);
+  for (let i = 1; i < pointArray.length; i++) {
+    ctx.lineTo(pointArray[i].x * gridSize + currentOrigin[0], -pointArray[i].y * gridSize + currentOrigin[1]);
+  }
+  ctx.closePath();
+  ctx.stroke();
+}
 
 
 function renderCanvas() {
@@ -653,8 +659,6 @@ function updateNText(){
   document.getElementById('nStatus').textContent = `n: ${n}`;
 }
 
-
-
 function updateButtonsOnLoad() {
 	document.getElementById('functionsToCall').innerHTML = '';
 	for (let i = 0; i < funToCall.length; i++) {
@@ -671,7 +675,6 @@ function updateButtonsOnLoad() {
     `;
 	}
 }
-
 
 function localLoad() {
   updateNText();
@@ -705,9 +708,6 @@ function localLoad() {
 		console.log('[autosaved draw state]');
     }, 10000);
 }
-
-
-
 
 requestAnimationFrame(renderCanvas);
 window.addEventListener('DOMContentLoaded', localLoad);

@@ -22,21 +22,16 @@ canvas {
 	z-index: 2;
 }
 
+.controls select {
+  height: 30px;
+}
+
 #functionsToCall {
   position: absolute;
   top: 150%;
 	display: flex;
 	flex-direction: column;
   z-index: 2;
-}
-
-#hiddenBehind {
-  position: absolute;
-  top: 137%;
-  left: 50%;
-  display: flex;
-	flex-direction: column;
-  z-index: 1;
 }
 
 .inputs {
@@ -56,16 +51,8 @@ canvas {
   transition: ease-in-out 0.25s;
 }
 
-
 .drawnButtonsClass:hover {
-  opacity: 25%;
-}
-
-.hiddenTextBehind {
-  text-align: center;
-  width: max-content;
-  background-color: black;
-  color: white;
+  opacity: 50%;
 }
 
 .hidden {

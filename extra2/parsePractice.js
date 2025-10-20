@@ -31,7 +31,6 @@ function parseTest(text){
   return output;
 }
 
-//let textToParse = 'what\'s going on ?';
-let textToParse = 'no i wouldn\'t'
+let textToParse = 'what\'s going on ?';
 
 console.log(parseTest(textToParse));

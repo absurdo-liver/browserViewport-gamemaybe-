@@ -519,10 +519,7 @@ function drawGeometry(pointArray, color) {
 
 function pointArrayParse(textToParse) {
   const output = [];
-  const normalizedText = textToParse.replaceAll(' ', '')
-                                 .replace('(', '')
-                                 .replaceAll('),(', '|')
-                                 .replace(')', '');
+  const normalizedText = textToParse.replaceAll(' ', '').replace('(', '').replaceAll('),(', '|').replace(')', '');
   const pairs = normalizedText.split('|');
   
   for (const pair of pairs) {

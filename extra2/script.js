@@ -190,8 +190,9 @@ function callRendering() {
 		console.log('chosing clear');
 		funToCall.length = 0;
 		n = 0;
-		localStorage.setItem('drawnFunctions', JSON.stringify(funToCall));
-		localStorage.setItem('')
+		//localStorage.setItem('drawnFunctions', JSON.stringify(funToCall));
+		//localStorage.setItem('');
+    updateNText();
 		console.log('chose success');
 	} else if (opt === 'drawLinearStandard') {
 		console.log('chosing linear');
@@ -201,6 +202,7 @@ function callRendering() {
 			name: 'drawLinearStandard',
 			count: n + 1
 		});
+    updateNText();
 		console.log('chose success');
 	} else if (opt === 'drawPolynomialVertex') {
 		console.log('chosing polynomial');
@@ -210,6 +212,7 @@ function callRendering() {
 			name: 'drawPolynomialVertex',
 			count: n + 1
 		});
+    updateNText();
 		console.log('chose success');
 	} else if (opt === 'drawExp') {
 		console.log('chosing exponetial');
@@ -219,6 +222,7 @@ function callRendering() {
 			name: 'drawExp',
 			count: n + 1
 		});
+    updateNText();
 		console.log('chose success');
 	} else if (opt === 'drawTrigRatio') {
 		console.log('chose trig ratio');
@@ -228,6 +232,7 @@ function callRendering() {
 			name: 'drawTrigRatio',
 			count: n + 1
 		});
+    updateNText();
 		console.log('chose success');
 	} else if (opt === 'drawAngle') {
 		console.log('chosing angle');
@@ -237,6 +242,7 @@ function callRendering() {
 			name: 'drawAngle',
 			count: n + 1
 		});
+    updateNText();
 		console.log('chose success');
 	}
 	/*  else if(opt === 'drawGeometry'){
@@ -248,11 +254,13 @@ function callRendering() {
 	     func: drawGeometry, 
 	     args: [figure, pointArray, color],
 	     name: 'drawGeometry',
-	     count: n
+	     count: n + 1
 	   });
+     updateNText();
 	   console.log('chose success');
 	 }                                                             */
 	n += 1;
+  updateNText();
 	updateButtons();
 	console.log('success callRendering');
 }
@@ -609,6 +617,7 @@ function buttonsClickHandler(i) {
 	if (lastClick === 0) {
 		if (funToCall[i - 1]) {
 			n -= 1;
+      updateNText();
 			for (let a = 0; a < funToCall.length; a++) {
 				if (funToCall[a].count === i) {
 					funToCall.splice(a, 1);
@@ -616,7 +625,6 @@ function buttonsClickHandler(i) {
 				}
 			}
 			document.getElementById('functionsToCall').innerHTML = '';
-            document.getElementById('hiddenBehind').innerHTML = '';
 			for (let b = 0; b < n; b++) {
 				funToCall[b].count = b + 1;
 				document.getElementById('functionsToCall').innerHTML += `
@@ -641,11 +649,17 @@ let gridCheckInterval = setInterval(() => {
 	currentOrigin = [currentWidth / 2, currentHeight / 2];
 }, 100);
 
+function updateNText(){
+  document.getElementById('nStatus').textContent = `n: ${n}`;
+}
+
+
+
 function updateButtonsOnLoad() {
 	document.getElementById('functionsToCall').innerHTML = '';
-    document.getElementById('hiddenBehind').innerHTML = '';
 	for (let i = 0; i < funToCall.length; i++) {
 		n += 1;
+    updateNText();
 		document.getElementById('functionsToCall').innerHTML += `
     <button 
     id='drawnButton${funToCall[i].count}' 
@@ -658,7 +672,9 @@ function updateButtonsOnLoad() {
 	}
 }
 
+
 function localLoad() {
+  updateNText();
 	let stored = localStorage.getItem('drawnFunctions');
 
 	if (!stored) {
@@ -680,6 +696,7 @@ function localLoad() {
 			console.error('failed to load saved state:', err);
 			funToCall = [];
 		}
+    
 	}
 
 	// Autosave every 10 seconds
@@ -688,6 +705,7 @@ function localLoad() {
 		console.log('[autosaved draw state]');
     }, 10000);
 }
+
 
 
 

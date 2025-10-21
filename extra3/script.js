@@ -5,9 +5,12 @@ const mousePosRecent1 = document.getElementById('mousePosRecent1');
 const mousePosRecent2 = document.getElementById('mousePosRecent2');
 const mousePosRecent3 = document.getElementById('mousePosRecent3');
 const mousePosLeastRecent = document.getElementById('mousePosLeastRecent');
+const mouseClickCurrent = document.getElementById('mouseClickCurrent');
+const mouseWheelScroll = document.getElementById('mouseWheelScroll');
 
 var sizeMult = 1;
 var lastScrollY = window.scrollY;
+const elemInitWidth = parseFloat(testElement.style.width);
 
 var mouseDetails = {
   currentPostion: [100, 100],
@@ -28,13 +31,12 @@ var offset = {
   x: 0,
   y: 0
 };
-window.addEventListener('scroll', scrollHandler);
+
+window.addEventListener('wheel', scrollHandler);
 window.addEventListener('mousemove', mouseMovementHandler);
 window.addEventListener('mousedown', mouseClickHandler);
 window.addEventListener('mouseup', mouseUpHandler);
-window.addEventListener('contextmenu', function(e) {
-  e.preventDefault();
-});
+window.addEventListener('contextmenu', function(e) {e.preventDefault();});
 
 function mouseMovementHandler(e) {
   mouseDetails.currentPostion[0] = e.clientX;
@@ -66,8 +68,8 @@ function moveElement(elem) {
 }
 
 function updateElemSize(elem) {
-  elem.style.width = `calc(var(--baseSize) * ${sizeMult})`;
-  elem.style.height = `calc(var(--baseSize) * ${sizeMult})`;
+  let baseFontSize = 16;
+  elem.style.fontSize = `${sizeMult*baseFontSize}px`;
 };
 
 function mouseClickHandler(e) {
@@ -75,14 +77,17 @@ function mouseClickHandler(e) {
     mouseDetails.leftClick = true;
     offset.x = e.clientX - testElement.offsetLeft;
     offset.y = e.clientY - testElement.offsetTop;
+    mouseClickCurrent.textContent = 'left-click';
   }
 
   if (e.button === 1) {
     mouseDetails.middleClick = true;
+    mouseClickCurrent.textContent = 'middle-click';
   }
 
   if (e.button === 2) {
     mouseDetails.rightClick = true;
+    mouseClickCurrent.textContent = 'right-click';
   }
 }
 
@@ -90,21 +95,23 @@ function mouseUpHandler() {
   mouseDetails.leftClick = false;
   mouseDetails.middleClick = false;
   mouseDetails.rightClick = false;
+  mouseClickCurrent.textContent = 'up';
 }
 
-function scrollHandler() {
-    const currentScrollY = window.scrollY;
+function scrollHandler(e) {
+    e.preventDefault();
 
-    if (currentScrollY > lastScrollY) {
-        // scrolling down
+    if (e.deltaY > 0) {
+        // Scrolling down
         sizeMult -= 0.1;
-    } else if (currentScrollY < lastScrollY) {
-        // scrolling up
+    } else if (e.deltaY < 0) {
+        // Scrolling up
         sizeMult += 0.1;
     }
-    lastScrollY = currentScrollY;
+    let sign = e.deltaY <= 0 ? 'up' : 'down';
+    sizeMult = Math.round(sizeMult * 1000)/1000;
+    mouseWheelScroll.textContent = `${sizeMult}x [${sign}]`;
     sizeMult = Math.max(0.5, Math.min(5, sizeMult));
-
     updateElemSize(testElement);
 }
 

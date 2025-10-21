@@ -115,5 +115,11 @@ function scrollHandler(e) {
     updateElemSize(testElement);
 }
 
+window.addEventListener('keydown', (e) => {
+  if(e.key === 'c'){
+    sizeMult = 1;
+    scrollHandler(e);
+  }
+})
 
 

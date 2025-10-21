@@ -65,6 +65,11 @@ function moveElement(elem) {
   }
 }
 
+function updateElemSize(elem) {
+  elem.style.width = `calc(var(--baseSize) * ${sizeMult})`;
+  elem.style.height = `calc(var(--baseSize) * ${sizeMult})`;
+};
+
 function mouseClickHandler(e) {
   if (e.button === 0) {
     mouseDetails.leftClick = true;
@@ -87,22 +92,21 @@ function mouseUpHandler() {
   mouseDetails.rightClick = false;
 }
 
-function scrollHandler(){
-  const currentScrollY = window.scrollY;
+function scrollHandler() {
+    const currentScrollY = window.scrollY;
 
     if (currentScrollY > lastScrollY) {
-        // Scrolling down
-        console.log('Scrolling Down');
-        // Add your logic for scrolling down here
+        // scrolling down
+        sizeMult -= 0.1;
     } else if (currentScrollY < lastScrollY) {
-        // Scrolling up
-        console.log('Scrolling Up');
-        // Add your logic for scrolling up here
+        // scrolling up
+        sizeMult += 0.1;
     }
-
     lastScrollY = currentScrollY;
+    sizeMult = Math.max(0.5, Math.min(5, sizeMult));
+
+    updateElemSize(testElement);
 }
 
-// `calc(var(--baseSize) * ${sizeMult})`;
 
 

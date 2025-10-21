@@ -8,15 +8,16 @@
 <body>
   <div id='info'>
     <p id='mousePosCurrent'>(0, 0)</p>
-    <p id='mousePosMostRecent'>(0, 0)</p>
-    <p id='mousePosRecent1'>(0, 0)</p>
-    <p id='mousePosRecent2'>(0, 0)</p>
-    <p id='mousePosRecent3'>(0, 0)</p>
-    <p id='mousePosLeastRecent'>(0, 0)</p>
+    <input id='rangeBar' type="range" min="1" max="100" value="7">
+    <br>
+    <p id='rangeValue'>7</p>
     <br>
     <p id='mouseClickCurrent'>up</p>
     <p id='mouseWheelScroll'>1x [0]</p>
+    <p id='mouseIsMoving'>false</p>
+    <p id='historyArray'>[]</p>
   </div>
+  <p id='cursorP'>+</p>
   <p id='testElement'>test</p>
 </body>
 </html>

@@ -49,7 +49,7 @@ button {
 
 
 .opacityTransitions{
-  transition: ease-in-out 0.5s;
+  transition: ease-in-out 250ms;
   opacity: 0%;
 }
 

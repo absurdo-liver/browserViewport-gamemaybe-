@@ -12,6 +12,7 @@ var sizeMult = 1;
 var cursorSizeMult = 1;
 var globalI = 1;
 var baseFontSize = 16;
+var cursorAmount = 7;
 var intervalId = null; 
 var proccessCollect = false;
 var mousePositionsHistory = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]];
@@ -81,6 +82,7 @@ function moveElement(elem) {
       newElem.style.justifyContent = `center`;
       newElem.style.alignItems = `center`;
       newElem.style.zIndex = `1`;
+      newElem.style.backgroundColor = `black`;
       newElem.style.opacity = `${100 - i*(mousePositionsHistory.length/100)}%`;
       document.body.appendChild(newElem);
     }
@@ -159,6 +161,7 @@ function keyHandler(e) {
 
 function rangeSliderHandler(){
   rangeValue.textContent = rangeBar.value
+  cursorAmount = rangeBar.value;
   for(let i = 0; i < mousePositionsHistory.length; i++){
     document.getElementById(`newElem${i+1}`).remove();
   }
@@ -196,7 +199,7 @@ const movementCheckInterval = setInterval(() => {
 
   mouseDetails.previousPosition = mouseDetails.currentPosition;
   mouseIsMoving.textContent = mouseDetails.isMoving;
-}, 25);
+}, 100);
 
 
 

@@ -9,8 +9,8 @@ const rangeValue = document.getElementById('rangeValue');
 
 var sizeMult = 1;
 var cursorSizeMult = 1;
+var globalI = 1;
 var intervalId = null; 
-var isUpdatingArray = false;
 var mousePositionsHistory = [[0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0], [0, 0]];
 
 var mouseDetails = {
@@ -42,8 +42,6 @@ function mouseMovementHandler(e) {
   if (e) {
     mouseDetails.currentPosition = [e.clientX, e.clientY];
   }
-
-  isUpdatingArray = false;
   
   mousePositionsHistory.unshift([...mouseDetails.currentPosition]);
   mousePositionsHistory.pop();
@@ -155,32 +153,19 @@ function rangeSliderHandler(e){
 
 
 const movementCheckInterval = setInterval(() => {
-
   mouseDetails.isMoving = (mouseDetails.currentPosition[0] !== mouseDetails.previousPosition[0] || mouseDetails.currentPosition[1] !== mouseDetails.previousPosition[1]);
-  
-  if (!mouseDetails.isMoving && !isUpdatingArray) {
-    isUpdatingArray = true;
-
-    const firstPosition = mousePositionsHistory[0];
-    const allSame = mousePositionsHistory.every(pos => pos[0] === firstPosition[0] && pos[1] === firstPosition[1]);
-    
-    if (allSame) {
-      isUpdatingArray = false;
-    } else {
-      for (let i = mousePositionsHistory.length - 1; i > 0; i--) {
-        mousePositionsHistory[i] = mousePositionsHistory[i - 1].slice();
-      }
-      moveElement(false);
+  if(mouseDetails.isMoving) globalI = 1;
+  if(!mouseDetails.isMoving){
+    if(globalI < mousePositionsHistory.length + 1){
+      mousePositionsHistory[(mousePositionsHistory.length - globalI)] = mousePositionsHistory[0];
+      globalI++
+      moveElement(testElement);
     }
   }
 
-  mouseDetails.previousPosition = mouseDetails.currentPosition.slice();
+  mouseDetails.previousPosition = mouseDetails.currentPosition;
   mouseIsMoving.textContent = mouseDetails.isMoving;
-}, 100);
-
-setInterval(() => {
-  document.getElementById('historyArray').textContent = mousePositionsHistory.join(', ');
-}, 100);
+}, 25);
 
 
 

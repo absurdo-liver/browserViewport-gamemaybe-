@@ -4,6 +4,11 @@ body {
   white-space: normal;
 }
 
+input {
+  position: fixed;
+  z-index: 2;
+}
+
 #testElement {
   font-size: 16px;
   margin: 0px;
@@ -25,3 +30,15 @@ body {
   margin: 0px;
   padding: 0px;
 }
+
+#cursorP {
+  margin: 0px;
+  position: absolute;
+  width: 1em;
+  height: 1em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+}
+

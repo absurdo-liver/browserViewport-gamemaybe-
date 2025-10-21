@@ -9,6 +9,11 @@ input {
   z-index: 2;
 }
 
+button {
+  position: fixed;
+  z-index: 2;
+}
+
 #testElement {
   font-size: 16px;
   margin: 0px;
@@ -40,5 +45,11 @@ input {
   justify-content: center;
   align-items: center;
   z-index: 1;
+}
+
+
+.opacityTransitions{
+  transition: ease-in-out 0.5s;
+  opacity: 0%;
 }
 

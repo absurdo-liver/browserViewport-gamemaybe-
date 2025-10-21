@@ -1,0 +1,21 @@
+body {
+  margin: 0px;
+  user-select: none;
+}
+
+#testElement {
+  --baseSize: max-content;
+  margin: 0px;
+  position: absolute;
+  top: 100px;
+  left: 100px;
+  width: calc(var(--baseSize) * 1);
+  height: calc(var(--baseSize) * 1);
+  background-color: aqua;
+}
+
+#info {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}

@@ -82,7 +82,7 @@ function moveElement(elem) {
       newElem.style.justifyContent = `center`;
       newElem.style.alignItems = `center`;
       newElem.style.zIndex = `1`;
-      newElem.style.backgroundColor = `black`;
+      // newElem.style.backgroundColor = `black`;
       newElem.style.opacity = `${100 - i*(mousePositionsHistory.length/100)}%`;
       document.body.appendChild(newElem);
     }

@@ -303,6 +303,8 @@ function redirect(n){
 		window.location = 'https://absurdo-liver.github.io/browserViewport-gamemaybe-/extra';
 	} else if(n === 2){
 		window.location = 'https://absurdo-liver.github.io/browserViewport-gamemaybe-/extra2';
+	} else if(n === 3){
+		window.location = 'https://absurdo-liver.github.io/browserViewport-gamemaybe-/extra3';
 	} else {
 		if(typeof n === 'string') window.location = n;
 	}

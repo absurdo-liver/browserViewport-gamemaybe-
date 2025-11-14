@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <body style="display: flex">
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        for (let i = 0; i <= 10; i++){
+        let div = document.createElement("div");
+        let text = document.createElement("p");
+        let img = document.createElement("img");
+        text.textContent = `${i}`;
+        img.src = `https://barcodeapi.org/api/dm/${i}`;
+        img.loading = 'lazy';
+        document.body.appendChild(div);
+        div.appendChild(text);
+        div.appendChild(img);
+        }
+      });
+    </script>
+  </body>
+</html>
